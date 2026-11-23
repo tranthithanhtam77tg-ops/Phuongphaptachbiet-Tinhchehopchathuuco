@@ -1,0 +1,4278 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HÓA HỌC 11 - BÀI 11: PHƯƠNG PHÁP TÁCH BIỆT VÀ TINH CHẾ HỢP CHẤT HỮU CƠ</title>
+    <style>
+        /* =========================================================
+           1. CSS RESET & BIẾN MÀU SẮC GIAO DIỆN
+           ========================================================= */
+        :root {
+            --sidebar-bg: #403e91;
+            --sidebar-active: #534fa8;
+            --sidebar-hover: #4e4ba0;
+            --bg-main: #f3f2fa;
+            --card-bg: #ffffff;
+            --primary-text: #2d3436;
+            --secondary-text: #4a5568;
+            --accent-purple: #6c5ce7;
+            --accent-orange: #f39c12;
+            --accent-orange-hover: #e67e22;
+            --accent-teal: #05c46b;
+            --accent-red: #ea2027;
+            --accent-blue: #0984e3;
+            --border-color: #dfe6e9;
+            --badge-bg: #e0dbf5;
+            --badge-text: #5f27cd;
+            --shadow: 0 10px 20px rgba(0, 0, 0, 0.05);
+            --shadow-lg: 0 15px 35px rgba(0, 0, 0, 0.1);
+            --success-color: #2ecc71;
+            --warning-color: #f39c12;
+            --error-color: #e74c3c;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Arial, 'Noto Sans', sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-main);
+            color: var(--primary-text);
+            display: flex;
+            height: 100vh;
+            overflow: hidden;
+            font-size: 16px;
+        }
+
+        button, input, select, textarea {
+            font-family: inherit;
+        }
+
+        /* =========================================================
+           2. SIDEBAR BÊN TRÁI (330px, NỀN TÍM ĐẬM #403e91)
+           ========================================================= */
+        .sidebar {
+            width: 330px;
+            background-color: var(--sidebar-bg);
+            color: #ffffff;
+            display: flex;
+            flex-direction: column;
+            padding: 20px;
+            overflow-y: auto;
+            border-right: 1px solid rgba(255, 255, 255, 0.1);
+            flex-shrink: 0;
+            transition: transform 0.3s ease;
+            z-index: 40;
+        }
+
+        .sidebar::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .sidebar::-webkit-scrollbar-thumb {
+            background: rgba(255, 255, 255, 0.25);
+            border-radius: 6px;
+        }
+
+        .subject-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 22px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+        }
+
+        .subject-logo {
+            width: 52px;
+            height: 52px;
+            background: linear-gradient(135deg, #a29bfe, #6c5ce7);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.8rem;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+            flex-shrink: 0;
+        }
+
+        .subject-title-container {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .subject-title {
+            font-size: 1.35rem;
+            font-weight: 900;
+            letter-spacing: 0.8px;
+        }
+
+        .subject-subtitle {
+            font-size: 0.84rem;
+            color: #dfe6e9;
+            margin-top: 3px;
+            line-height: 1.35;
+        }
+
+        /* MENU ĐIỀU HƯỚNG */
+        .nav-menu {
+            display: flex;
+            flex-direction: column;
+            gap: 7px;
+            flex-grow: 1;
+        }
+
+        .nav-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 15px;
+            border-radius: 10px;
+            color: #dfe6e9;
+            text-decoration: none;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-size: 0.98rem;
+            user-select: none;
+        }
+
+        .nav-item:hover {
+            background-color: var(--sidebar-hover);
+            color: #ffffff;
+        }
+
+        .nav-item.active {
+            background-color: var(--sidebar-active);
+            color: #ffffff;
+            box-shadow: inset 4px 0 0 #ffffff;
+        }
+
+        .nav-icon {
+            font-size: 1.2rem;
+            width: 24px;
+            text-align: center;
+        }
+
+        /* ACCORDION SUBMENU LUYỆN TẬP */
+        .practice-submenu {
+            display: none;
+            flex-direction: column;
+            gap: 6px;
+            margin-left: 14px;
+            margin-top: 2px;
+            margin-bottom: 6px;
+            border-left: 2px solid rgba(255, 255, 255, 0.2);
+            padding-left: 10px;
+        }
+
+        .sub-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 9px 11px;
+            border-radius: 8px;
+            font-size: 0.88rem;
+            color: #dfe6e9;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-weight: 600;
+            gap: 8px;
+        }
+
+        .sub-item:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+            color: #ffffff;
+        }
+
+        .sub-item.active {
+            background-color: rgba(255, 255, 255, 0.18);
+            color: #ffffff;
+            font-weight: 800;
+            border-left: 3px solid var(--accent-orange);
+        }
+
+        .sub-badge {
+            background-color: rgba(255, 255, 255, 0.22);
+            padding: 2px 8px;
+            border-radius: 12px;
+            font-size: 0.74rem;
+            font-weight: 800;
+            white-space: nowrap;
+        }
+
+        /* LƯỚI Ô SỐ CÂU HỎI */
+        .question-dots {
+            display: none;
+            grid-template-columns: repeat(6, 1fr);
+            gap: 5px;
+            margin: 4px 0 8px 0;
+            padding: 8px;
+            background-color: rgba(0, 0, 0, 0.22);
+            border-radius: 8px;
+        }
+
+        .dot-btn {
+            background-color: rgba(255, 255, 255, 0.16);
+            color: #ffffff;
+            border: 1px solid rgba(255, 255, 255, 0.22);
+            height: 30px;
+            border-radius: 6px;
+            font-size: 0.82rem;
+            font-weight: 700;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.15s;
+        }
+
+        .dot-btn:hover {
+            background-color: rgba(255, 255, 255, 0.32);
+            transform: scale(1.05);
+        }
+
+        .dot-btn.correct {
+            background-color: var(--success-color);
+            color: #ffffff;
+            border-color: var(--success-color);
+        }
+
+        .dot-btn.partial {
+            background-color: var(--warning-color);
+            color: #ffffff;
+            border-color: var(--warning-color);
+        }
+
+        .dot-btn.incorrect {
+            background-color: var(--error-color);
+            color: #ffffff;
+            border-color: var(--error-color);
+        }
+
+        .dot-btn.active {
+            background-color: #ffffff !important;
+            color: var(--sidebar-bg) !important;
+            border-color: #ffffff !important;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.35);
+            font-weight: 900;
+            transform: scale(1.06);
+        }
+
+        .sidebar-footer {
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 1px solid rgba(255, 255, 255, 0.15);
+        }
+
+        .btn-reset {
+            background-color: transparent;
+            color: rgba(255, 255, 255, 0.88);
+            border: 1.5px dashed rgba(255, 255, 255, 0.45);
+            width: 100%;
+            padding: 10px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: 700;
+            font-size: 0.9rem;
+            transition: all 0.2s;
+        }
+
+        .btn-reset:hover {
+            color: #ffffff;
+            border-color: #ffffff;
+            background-color: rgba(255, 255, 255, 0.12);
+        }
+
+        /* =========================================================
+           3. KHU VỰC HIỂN THỊ CHÍNH (MAIN WORKSPACE)
+           ========================================================= */
+        .main-content {
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            background-color: var(--bg-main);
+            overflow-y: auto;
+            position: relative;
+            min-width: 0;
+        }
+
+        .teacher-banner {
+            background-color: #ffe8cc;
+            border-bottom: 2px solid #ffa801;
+            color: #b34700;
+            padding: 9px 28px;
+            font-size: 0.95rem;
+            font-weight: 700;
+            display: none;
+            justify-content: space-between;
+            align-items: center;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .content-header {
+            background-color: var(--card-bg);
+            padding: 14px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid var(--border-color);
+            box-shadow: var(--shadow);
+            gap: 12px;
+            flex-wrap: wrap;
+            position: sticky;
+            top: 0;
+            z-index: 20;
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .mobile-menu-btn {
+            display: none;
+            background: var(--sidebar-bg);
+            color: #ffffff;
+            border: none;
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            font-size: 1.3rem;
+            cursor: pointer;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .content-header h2 {
+            font-size: 1.3rem;
+            color: #2c3e50;
+            font-weight: 800;
+        }
+
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .header-progress {
+            background-color: #f1f2f6;
+            color: #2c3e50;
+            padding: 6px 16px;
+            border-radius: 30px;
+            font-weight: 700;
+            font-size: 0.92rem;
+        }
+
+        .header-score {
+            background-color: #e8f8f0;
+            color: #157a47;
+            border: 1.5px solid #b8ebd0;
+            padding: 5px 15px;
+            border-radius: 30px;
+            font-weight: 800;
+            font-size: 0.92rem;
+        }
+
+        .view-pane {
+            display: none;
+            padding: 24px 32px;
+            flex-grow: 1;
+        }
+
+        .view-pane.active {
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* =========================================================
+           4. TRANG CHỦ (HOME VIEW)
+           ========================================================= */
+        .home-view {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            padding: 18px 20px;
+            max-width: 1020px;
+            width: 100%;
+            margin: auto;
+        }
+
+        .home-logo-box {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            margin-bottom: 12px;
+            flex-wrap: wrap;
+        }
+
+        .home-logo {
+            font-size: 3.1rem;
+        }
+
+        .home-replica-badge {
+            background-color: #e0dbf5;
+            color: var(--sidebar-bg);
+            padding: 7px 18px;
+            border-radius: 25px;
+            font-size: 0.92rem;
+            font-weight: 800;
+            letter-spacing: 0.6px;
+        }
+
+        .home-title {
+            font-size: 2.55rem;
+            font-weight: 900;
+            background: linear-gradient(135deg, #e67e22, #e74c3c);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 22px;
+            line-height: 1.25;
+        }
+
+        .home-cards-grid {
+            display: grid;
+            grid-template-columns: 1.25fr 0.95fr;
+            gap: 20px;
+            margin-bottom: 26px;
+        }
+
+        .home-info-card {
+            background: #ffffff;
+            border-radius: 16px;
+            padding: 24px 26px;
+            box-shadow: var(--shadow);
+            border: 1.5px solid var(--border-color);
+        }
+
+        .home-info-card.goal-card {
+            border-top: 5px solid var(--sidebar-bg);
+        }
+
+        .home-info-card.question-open-card {
+            border-top: 5px solid var(--accent-orange);
+            background: linear-gradient(180deg, #fffdf9, #fff7ec);
+        }
+
+        .home-info-card h3 {
+            font-size: 1.15rem;
+            color: var(--sidebar-bg);
+            margin-bottom: 12px;
+            font-weight: 800;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .home-info-card.question-open-card h3 {
+            color: #d35400;
+        }
+
+        .home-info-card ul {
+            padding-left: 20px;
+            line-height: 1.7;
+            color: #34495e;
+            font-size: 1.03rem;
+        }
+
+        .home-info-card li {
+            margin-bottom: 8px;
+        }
+
+        .home-info-card p {
+            line-height: 1.75;
+            color: #34495e;
+            font-size: 1.08rem;
+            font-style: italic;
+        }
+
+        .btn-start-home {
+            background: linear-gradient(135deg, var(--accent-purple), #5f27cd);
+            color: #ffffff;
+            border: none;
+            padding: 16px 40px;
+            font-size: 1.2rem;
+            font-weight: 800;
+            border-radius: 14px;
+            cursor: pointer;
+            box-shadow: 0 8px 22px rgba(108, 92, 231, 0.35);
+            transition: transform 0.2s, box-shadow 0.2s;
+            align-self: flex-start;
+        }
+
+        .btn-start-home:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 26px rgba(108, 92, 231, 0.45);
+        }
+
+        /* =========================================================
+           5. KHÔNG GIAN BÀI HỌC (SLIDESHOW 5 SLIDE)
+           ========================================================= */
+        .slideshow-container {
+            display: flex;
+            flex-direction: column;
+            background-color: #ffffff;
+            border-radius: 18px;
+            box-shadow: var(--shadow-lg);
+            overflow: hidden;
+            flex-grow: 1;
+            min-height: 560px;
+        }
+
+        .slideshow-header {
+            background-color: var(--sidebar-bg);
+            padding: 13px 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            color: #ffffff;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .slideshow-title {
+            font-weight: 800;
+            font-size: 1.05rem;
+            letter-spacing: 0.3px;
+        }
+
+        .slideshow-controls-right {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .btn-speak-slide {
+            background-color: var(--accent-purple);
+            color: #ffffff;
+            border: none;
+            padding: 7px 14px;
+            border-radius: 8px;
+            font-size: 0.88rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .btn-speak-slide:hover {
+            background-color: #5f27cd;
+        }
+
+        .slideshow-index {
+            background-color: rgba(255, 255, 255, 0.22);
+            padding: 5px 13px;
+            border-radius: 14px;
+            font-size: 0.88rem;
+            font-weight: 800;
+        }
+
+        /* THANH ĐỒNG HỒ ĐẾM NGƯỢC */
+        .slide-timer-bar {
+            background-color: #f8f9fa;
+            border-bottom: 1.5px solid var(--border-color);
+            padding: 8px 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.92rem;
+            font-weight: 700;
+            color: #2c3e50;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .timer-display-group {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .timer-clock {
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 1.4rem;
+            font-weight: 900;
+            color: #2c3e50;
+            background-color: #ffffff;
+            border: 1.5px solid var(--border-color);
+            padding: 3px 12px;
+            border-radius: 8px;
+            min-width: 88px;
+            text-align: center;
+        }
+
+        .timer-clock.warning {
+            color: #d63031;
+            background-color: #ffeef0;
+            border-color: #d63031;
+            animation: blinker 1s linear infinite;
+        }
+
+        @keyframes blinker {
+            50% { opacity: 0.35; }
+        }
+
+        .timer-controls {
+            display: flex;
+            align-items: center;
+            gap: 7px;
+            flex-wrap: wrap;
+        }
+
+        .timer-preset-btn, .timer-btn {
+            background: #ffffff;
+            border: 1.5px solid var(--border-color);
+            color: #2c3e50;
+            padding: 5px 11px;
+            border-radius: 7px;
+            font-size: 0.82rem;
+            cursor: pointer;
+            font-weight: 700;
+            transition: all 0.2s;
+        }
+
+        .timer-preset-btn:hover, .timer-btn:hover {
+            border-color: var(--sidebar-bg);
+            color: var(--sidebar-bg);
+            background-color: #f1f2f6;
+        }
+
+        .timer-btn-start {
+            background-color: var(--accent-purple);
+            color: #ffffff;
+            border-color: var(--accent-purple);
+        }
+
+        .timer-btn-start:hover {
+            background-color: #5f27cd;
+            color: #ffffff;
+        }
+
+        /* VÙNG HIỂN THỊ NỘI DUNG SLIDE */
+        .slide-workspace {
+            padding: 26px 34px;
+            flex-grow: 1;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .slide-content {
+            display: none;
+            flex-direction: column;
+            gap: 16px;
+            animation: fadeIn 0.35s ease;
+        }
+
+        .slide-content.active-slide {
+            display: flex;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(8px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .slide-title {
+            font-size: 1.75rem;
+            font-weight: 900;
+            color: var(--sidebar-bg);
+            border-bottom: 3.5px solid var(--accent-orange);
+            padding-bottom: 7px;
+            align-self: flex-start;
+        }
+
+        .slide-body {
+            font-size: 1.08rem;
+            color: #2d3436;
+            line-height: 1.72;
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+        }
+
+        .slide-grid-2 {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+        }
+
+        .sgk-box {
+            border-radius: 12px;
+            padding: 15px 18px;
+            border: 1.5px solid var(--border-color);
+            background: #ffffff;
+        }
+
+        .sgk-box.activity {
+            background: #f2f1fb;
+            border-left: 5px solid var(--sidebar-bg);
+        }
+
+        .sgk-box.experiment {
+            background: #eef7ff;
+            border-left: 5px solid var(--accent-blue);
+        }
+
+        .sgk-box.know {
+            background: #fff9ec;
+            border-left: 5px solid var(--accent-orange);
+        }
+
+        .sgk-box.summary {
+            background: #eefbf3;
+            border-left: 5px solid var(--accent-teal);
+        }
+
+        .sgk-box h4 {
+            font-size: 1.06rem;
+            font-weight: 800;
+            margin-bottom: 8px;
+            color: #2c3e50;
+        }
+
+        .sgk-box ul, .sgk-box ol {
+            padding-left: 20px;
+        }
+
+        .sgk-box li {
+            margin-bottom: 5px;
+        }
+
+        .reveal-btn {
+            margin-top: 10px;
+            background: var(--sidebar-bg);
+            color: #ffffff;
+            border: none;
+            padding: 7px 14px;
+            border-radius: 8px;
+            font-size: 0.88rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .reveal-btn:hover {
+            background: var(--accent-purple);
+        }
+
+        .reveal-content {
+            display: none;
+            margin-top: 10px;
+            padding: 11px 14px;
+            background: #ffffff;
+            border-radius: 8px;
+            border: 1px dashed var(--accent-purple);
+            font-size: 0.98rem;
+        }
+
+        .reveal-content.open {
+            display: block;
+        }
+
+        .slideshow-footer {
+            background-color: #f8f9fa;
+            border-top: 1px solid var(--border-color);
+            padding: 13px 26px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 18px;
+        }
+
+        .slide-nav-btn {
+            background-color: #ffffff;
+            border: 1.5px solid var(--border-color);
+            color: #2c3e50;
+            padding: 9px 20px;
+            font-size: 0.96rem;
+            font-weight: 700;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .slide-nav-btn:hover {
+            background-color: #f1f2f6;
+            border-color: var(--sidebar-bg);
+        }
+
+        .slide-progress-wrapper {
+            flex-grow: 1;
+            display: flex;
+            align-items: center;
+        }
+
+        .slide-progress-bar {
+            width: 100%;
+            height: 9px;
+            background: #dfe6e9;
+            border-radius: 5px;
+            outline: none;
+            -webkit-appearance: none;
+            cursor: pointer;
+        }
+
+        .slide-progress-bar::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 22px;
+            height: 22px;
+            border-radius: 50%;
+            background: var(--accent-orange);
+            cursor: pointer;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.25);
+        }
+
+        /* =========================================================
+           6. PHÒNG THÍ NGHIỆM ẢO SVG ĐỘNG (SLIDE 5)
+           ========================================================= */
+        .simulation-container {
+            border: 2px dashed #c8c5ea;
+            border-radius: 16px;
+            padding: 18px;
+            background-color: #faf9ff;
+        }
+
+        .sim-btn-group {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+
+        .btn-sim-option {
+            background: #ffffff;
+            border: 1.5px solid var(--border-color);
+            padding: 10px 12px;
+            border-radius: 10px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-size: 0.92rem;
+            color: #2c3e50;
+        }
+
+        .btn-sim-option:hover {
+            border-color: var(--sidebar-bg);
+        }
+
+        .btn-sim-option.active {
+            background-color: var(--sidebar-bg);
+            color: #ffffff;
+            border-color: var(--sidebar-bg);
+            box-shadow: 0 4px 12px rgba(64, 62, 145, 0.25);
+        }
+
+        .sim-visual-box {
+            min-height: 310px;
+            background: linear-gradient(180deg, #1e272e, #2d3436);
+            border-radius: 14px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+            padding: 16px;
+            box-shadow: inset 0 4px 14px rgba(0, 0, 0, 0.35);
+        }
+
+        .sim-action-bar {
+            margin-top: 12px;
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .btn-sim-action {
+            background: var(--accent-orange);
+            color: #ffffff;
+            border: none;
+            padding: 8px 18px;
+            border-radius: 8px;
+            font-weight: 800;
+            cursor: pointer;
+            font-size: 0.92rem;
+            transition: all 0.2s;
+        }
+
+        .btn-sim-action:hover {
+            background: var(--accent-orange-hover);
+        }
+
+        .sim-desc-box {
+            margin-top: 14px;
+            font-size: 1rem;
+            line-height: 1.65;
+            background-color: #fff9f1;
+            border-left: 4px solid var(--accent-orange);
+            padding: 12px 16px;
+            border-radius: 6px;
+            color: #2c3e50;
+        }
+
+        @keyframes bubbleUp {
+            0% { transform: translateY(0); opacity: 0.9; }
+            100% { transform: translateY(-28px); opacity: 0; }
+        }
+
+        @keyframes dropFall {
+            0% { transform: translateY(0); opacity: 1; }
+            80% { opacity: 1; }
+            100% { transform: translateY(34px); opacity: 0; }
+        }
+
+        @keyframes vaporFlow {
+            to { stroke-dashoffset: -24; }
+        }
+
+        @keyframes bandFast {
+            0% { transform: translateY(0); }
+            100% { transform: translateY(72px); }
+        }
+
+        @keyframes bandMid {
+            0% { transform: translateY(0); }
+            100% { transform: translateY(45px); }
+        }
+
+        @keyframes bandSlow {
+            0% { transform: translateY(0); }
+            100% { transform: translateY(20px); }
+        }
+
+        /* =========================================================
+           7. HỆ THỐNG TỪ KHÓA (8 THẺ LẬT 3D)
+           ========================================================= */
+        .keyword-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 20px;
+            padding: 6px 0 20px 0;
+            perspective: 1100px;
+        }
+
+        .keyword-card {
+            background-color: transparent;
+            height: 235px;
+            cursor: pointer;
+        }
+
+        .keyword-inner {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            text-align: center;
+            transition: transform 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            transform-style: preserve-3d;
+            box-shadow: var(--shadow);
+            border-radius: 16px;
+        }
+
+        .keyword-card:hover .keyword-inner,
+        .keyword-card.flipped .keyword-inner {
+            transform: rotateY(180deg);
+        }
+
+        .keyword-front, .keyword-back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            -webkit-backface-visibility: hidden;
+            backface-visibility: hidden;
+            border-radius: 16px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .keyword-front {
+            background-color: #ffffff;
+            color: #2c3e50;
+            border: 1.5px solid var(--border-color);
+            border-left: 6px solid var(--sidebar-bg);
+        }
+
+        .keyword-symbol {
+            font-size: 2.5rem;
+            margin-bottom: 8px;
+        }
+
+        .keyword-front h3 {
+            font-size: 1.12rem;
+            color: var(--sidebar-bg);
+            margin-bottom: 8px;
+            font-weight: 800;
+            line-height: 1.35;
+        }
+
+        .keyword-hint {
+            font-size: 0.82rem;
+            color: #7f8c8d;
+            font-style: italic;
+        }
+
+        .keyword-back {
+            background: linear-gradient(135deg, var(--sidebar-bg), var(--sidebar-active));
+            color: #ffffff;
+            transform: rotateY(180deg);
+            text-align: left;
+            align-items: flex-start;
+            justify-content: flex-start;
+            line-height: 1.55;
+            font-size: 0.94rem;
+            overflow-y: auto;
+        }
+
+        .keyword-back h4 {
+            font-size: 1rem;
+            color: #ffeaa7;
+            margin-bottom: 8px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.25);
+            padding-bottom: 4px;
+            width: 100%;
+        }
+
+        /* =========================================================
+           8. KHÔNG GIAN LUYỆN TẬP (CHUẨN ĐỀ THI TN THPT 2025)
+           ========================================================= */
+        .practice-layout {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            flex-grow: 1;
+        }
+
+        .practice-layout.has-table {
+            display: grid;
+            grid-template-columns: 0.95fr 1.15fr;
+            gap: 22px;
+            align-items: start;
+        }
+
+        .data-box {
+            background-color: #fff9f1;
+            border: 1.5px solid #ffe8cc;
+            border-radius: 16px;
+            padding: 22px;
+            box-shadow: var(--shadow);
+            display: none;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .data-title {
+            font-weight: 800;
+            color: #b34700;
+            font-size: 1.12rem;
+        }
+
+        .data-table-container {
+            overflow-x: auto;
+        }
+
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            text-align: center;
+            font-size: 0.98rem;
+            background: #ffffff;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .data-table th {
+            background-color: var(--sidebar-bg);
+            color: #ffffff;
+            font-weight: 700;
+            padding: 10px 10px;
+            border: 1px solid #dfe6e9;
+        }
+
+        .data-table td {
+            border: 1px solid #dfe6e9;
+            padding: 10px 10px;
+            color: #2c3e50;
+        }
+
+        .data-source {
+            font-size: 0.84rem;
+            color: #7f8c8d;
+            text-align: right;
+            font-style: italic;
+        }
+
+        .question-card {
+            background: #ffffff;
+            border-radius: 18px;
+            padding: 28px 32px;
+            box-shadow: var(--shadow);
+            display: flex;
+            flex-direction: column;
+            gap: 18px;
+            flex-grow: 1;
+        }
+
+        .question-top-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .question-badge {
+            background-color: var(--badge-bg);
+            color: var(--badge-text);
+            padding: 6px 16px;
+            border-radius: 30px;
+            font-size: 0.88rem;
+            font-weight: 800;
+            text-transform: uppercase;
+        }
+
+        .level-badge {
+            background-color: #eef7ff;
+            color: #0969da;
+            padding: 5px 13px;
+            border-radius: 20px;
+            font-size: 0.82rem;
+            font-weight: 700;
+        }
+
+        .question-text {
+            font-size: 1.32rem;
+            font-weight: 700;
+            color: #2c3e50;
+            line-height: 1.62;
+        }
+
+        .keyword-toggle {
+            margin-left: 8px;
+            border: 1px solid #c9dff5;
+            background: #eef6ff;
+            color: #175580;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.8rem;
+            font-weight: 700;
+            padding: 4px 10px;
+            vertical-align: middle;
+        }
+
+        .keyword-toggle:hover {
+            background: #dceeff;
+        }
+
+        .practice-mark {
+            background: #ffec9b;
+            color: #382500;
+            border-radius: 4px;
+            padding: 0 3px;
+        }
+
+        /* PHẦN I: TRẮC NGHIỆM 4 LỰA CHỌN */
+        .choice-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 14px;
+        }
+
+        .choice-btn {
+            background: #ffffff;
+            border: 2px solid #dfe6e9;
+            padding: 15px 18px;
+            border-radius: 12px;
+            text-align: left;
+            font-size: 1.08rem;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            font-weight: 600;
+            color: #2c3e50;
+            line-height: 1.45;
+        }
+
+        .choice-btn:hover {
+            border-color: var(--sidebar-bg);
+            background-color: #f8f9ff;
+        }
+
+        .choice-btn.selected {
+            background-color: #eedffa;
+            border-color: var(--sidebar-active);
+            color: var(--sidebar-active);
+        }
+
+        .choice-btn.revealed-correct {
+            border: 2px solid #197048;
+            background: #e3f7eb;
+            color: #123b28;
+        }
+
+        .choice-btn.revealed-wrong {
+            border: 2px solid #ae3640;
+            background: #fff0f1;
+            color: #67141c;
+        }
+
+        .choice-letter {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background-color: #f1f2f6;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 900;
+            flex-shrink: 0;
+        }
+
+        .choice-btn.selected .choice-letter {
+            background-color: var(--sidebar-active);
+            color: #ffffff;
+        }
+
+        .choice-btn.revealed-correct .choice-letter {
+            background-color: #197048;
+            color: #ffffff;
+        }
+
+        .choice-btn.revealed-wrong .choice-letter {
+            background-color: #ae3640;
+            color: #ffffff;
+        }
+
+        /* PHẦN II: ĐÚNG / SAI 4 Ý CHUẨN TN THPT 2025 */
+        .tf-list {
+            display: none;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .tf-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 16px;
+            padding: 14px 16px;
+            border: 1.5px solid var(--border-color);
+            border-radius: 12px;
+            background: #fafbff;
+            transition: all 0.2s;
+        }
+
+        .tf-row.row-correct {
+            border-color: #197048;
+            background: #e9f9ef;
+        }
+
+        .tf-row.row-wrong {
+            border-color: #ae3640;
+            background: #fff1f2;
+        }
+
+        .tf-stmt-text {
+            font-size: 1.05rem;
+            line-height: 1.55;
+            color: #2c3e50;
+            flex-grow: 1;
+        }
+
+        .tf-btn-group {
+            display: flex;
+            gap: 8px;
+            flex-shrink: 0;
+        }
+
+        .tf-toggle-btn {
+            min-width: 74px;
+            padding: 9px 14px;
+            border-radius: 8px;
+            border: 2px solid #cfd8dc;
+            background: #ffffff;
+            font-weight: 800;
+            font-size: 0.95rem;
+            cursor: pointer;
+            color: #2c3e50;
+            transition: all 0.15s;
+        }
+
+        .tf-toggle-btn:hover {
+            border-color: var(--sidebar-bg);
+        }
+
+        .tf-toggle-btn.active-true {
+            background: #0984e3;
+            border-color: #0984e3;
+            color: #ffffff;
+        }
+
+        .tf-toggle-btn.active-false {
+            background: #6c5ce7;
+            border-color: #6c5ce7;
+            color: #ffffff;
+        }
+
+        .tf-submit-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-top: 6px;
+        }
+
+        .tf-scoring-note {
+            font-size: 0.88rem;
+            color: #57606f;
+            background: #f1f2f6;
+            padding: 7px 12px;
+            border-radius: 8px;
+        }
+
+        /* PHẦN III: TRẢ LỜI NGẮN */
+        .short-answer-container {
+            display: none;
+            align-items: center;
+            gap: 14px;
+            flex-wrap: wrap;
+            background: #f8f9ff;
+            padding: 18px 20px;
+            border-radius: 12px;
+            border: 1.5px solid #dcd9f8;
+        }
+
+        .answer-label {
+            font-size: 1.15rem;
+            font-weight: 800;
+            color: #2c3e50;
+        }
+
+        .number-answer {
+            width: 180px;
+            padding: 12px 16px;
+            border: 2px solid var(--sidebar-bg);
+            border-radius: 10px;
+            font-size: 1.35rem;
+            font-weight: 800;
+            text-align: center;
+            letter-spacing: 2px;
+            outline: none;
+            background: #ffffff;
+            color: var(--sidebar-bg);
+        }
+
+        .number-answer:focus {
+            box-shadow: 0 0 0 4px rgba(108, 92, 231, 0.22);
+        }
+
+        .btn-confirm {
+            background-color: var(--accent-orange);
+            color: #ffffff;
+            border: none;
+            padding: 12px 28px;
+            font-size: 1.08rem;
+            font-weight: 800;
+            border-radius: 10px;
+            cursor: pointer;
+            box-shadow: 0 4px 14px rgba(243, 156, 18, 0.35);
+            transition: all 0.2s;
+        }
+
+        .btn-confirm:hover {
+            background-color: var(--accent-orange-hover);
+        }
+
+        /* HỘP PHẢN HỒI & GIẢI THÍCH */
+        #practiceFeedback {
+            padding: 16px 20px;
+            border-left: 5px solid #175580;
+            background: #f0f7ff;
+            color: #16324a;
+            border-radius: 10px;
+            line-height: 1.65;
+            font-size: 1rem;
+        }
+
+        #practiceFeedback.fb-correct {
+            border-left-color: #197048;
+            background: #ecfaf1;
+            color: #123b28;
+        }
+
+        #practiceFeedback.fb-partial {
+            border-left-color: #d35400;
+            background: #fff7eb;
+            color: #5c2b06;
+        }
+
+        #practiceFeedback.fb-wrong {
+            border-left-color: #ae3640;
+            background: #fff2f3;
+            color: #67141c;
+        }
+
+        #practiceFeedback p {
+            margin: 6px 0;
+        }
+
+        #practiceFeedback ul {
+            padding-left: 20px;
+            margin-top: 6px;
+        }
+
+        /* THANH ĐIỀU HƯỚNG DƯỚI THẺ CÂU HỎI */
+        .practice-toolbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: auto;
+            padding-top: 16px;
+            border-top: 1px solid var(--border-color);
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .btn-nav {
+            background-color: #f1f2f6;
+            color: #2c3e50;
+            border: 1.5px solid #dfe4ea;
+            padding: 10px 22px;
+            font-weight: 700;
+            font-size: 0.98rem;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .btn-nav:hover:not(:disabled) {
+            background-color: #e4e7ee;
+            border-color: var(--sidebar-bg);
+        }
+
+        .btn-nav:disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
+        }
+
+        .icon-btn {
+            width: 42px;
+            height: 42px;
+            border-radius: 10px;
+            border: 1.5px solid var(--border-color);
+            background: #ffffff;
+            font-size: 1.15rem;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s;
+        }
+
+        .icon-btn:hover {
+            background: #f1f2f6;
+            border-color: var(--sidebar-bg);
+        }
+
+        /* =========================================================
+           9. BÁO CÁO KẾT QUẢ (DASHBOARD)
+           ========================================================= */
+        .dashboard-container {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .score-hero-card {
+            background: linear-gradient(135deg, var(--sidebar-bg), #6c5ce7);
+            color: #ffffff;
+            border-radius: 18px;
+            padding: 26px 32px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 20px;
+            box-shadow: var(--shadow-lg);
+        }
+
+        .score-hero-main {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .score-hero-number {
+            font-size: 3.1rem;
+            font-weight: 900;
+            color: #ffeaa7;
+            line-height: 1.1;
+        }
+
+        .score-breakdown-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 14px;
+            flex-grow: 1;
+            max-width: 580px;
+        }
+
+        .breakdown-pill {
+            background: rgba(255, 255, 255, 0.14);
+            border: 1px solid rgba(255, 255, 255, 0.22);
+            border-radius: 12px;
+            padding: 12px 14px;
+            text-align: center;
+        }
+
+        .breakdown-pill .bp-label {
+            font-size: 0.82rem;
+            color: #e0dbf5;
+            margin-bottom: 4px;
+        }
+
+        .breakdown-pill .bp-val {
+            font-size: 1.25rem;
+            font-weight: 900;
+        }
+
+        .dashboard-stats {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 18px;
+        }
+
+        .stat-card {
+            background: #ffffff;
+            padding: 20px;
+            border-radius: 14px;
+            text-align: center;
+            box-shadow: var(--shadow);
+            border: 1.5px solid var(--border-color);
+        }
+
+        .stat-value {
+            font-size: 2.3rem;
+            font-weight: 900;
+            color: #2c3e50;
+        }
+
+        .stat-value.success { color: var(--success-color); }
+        .stat-value.error { color: var(--error-color); }
+
+        .stat-label {
+            font-size: 0.96rem;
+            color: #7f8c8d;
+            font-weight: 700;
+            margin-top: 4px;
+        }
+
+        .progress-section, .part-progress-box {
+            background: #ffffff;
+            padding: 22px 26px;
+            border-radius: 16px;
+            box-shadow: var(--shadow);
+            border: 1.5px solid var(--border-color);
+        }
+
+        .progress-info {
+            display: flex;
+            justify-content: space-between;
+            font-weight: 800;
+            color: #2c3e50;
+        }
+
+        .progress-bar-bg {
+            background-color: #dfe6e9;
+            height: 16px;
+            border-radius: 10px;
+            overflow: hidden;
+            margin-top: 10px;
+        }
+
+        .progress-bar-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--accent-purple), var(--accent-teal));
+            width: 0%;
+            transition: width 0.4s ease;
+        }
+
+        .dashboard-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 8px;
+        }
+
+        .node-btn {
+            width: 42px;
+            height: 42px;
+            border-radius: 10px;
+            border: 1.5px solid #cfd8dc;
+            background: #f8f9fa;
+            font-weight: 800;
+            font-size: 0.95rem;
+            cursor: pointer;
+            color: #2c3e50;
+            transition: transform 0.15s;
+        }
+
+        .node-btn:hover {
+            transform: scale(1.08);
+        }
+
+        .node-btn.correct {
+            background: var(--success-color);
+            border-color: var(--success-color);
+            color: #ffffff;
+        }
+
+        .node-btn.partial {
+            background: var(--warning-color);
+            border-color: var(--warning-color);
+            color: #ffffff;
+        }
+
+        .node-btn.incorrect {
+            background: var(--error-color);
+            border-color: var(--error-color);
+            color: #ffffff;
+        }
+
+        /* =========================================================
+           10. VÒNG QUAY MAY MẮN & MODAL TÙY CHỈNH (KHÔNG DÙNG ALERT)
+           ========================================================= */
+        .wheel-workspace {
+            display: flex;
+            gap: 30px;
+            justify-content: center;
+            align-items: center;
+            flex-wrap: wrap;
+            margin: auto;
+        }
+
+        .wheel-box {
+            position: relative;
+            width: 420px;
+            height: 420px;
+            max-width: 90vw;
+            max-height: 90vw;
+        }
+
+        #wheelCanvas {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            box-shadow: var(--shadow-lg);
+            border: 8px solid #ffffff;
+            display: block;
+        }
+
+        .wheel-pointer {
+            position: absolute;
+            top: -12px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 0;
+            height: 0;
+            border-left: 18px solid transparent;
+            border-right: 18px solid transparent;
+            border-top: 32px solid var(--accent-red);
+            z-index: 10;
+            filter: drop-shadow(0 3px 4px rgba(0, 0, 0, 0.25));
+        }
+
+        .wheel-center-btn {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 78px;
+            height: 78px;
+            border-radius: 50%;
+            background: #ffffff;
+            border: 4px solid var(--sidebar-bg);
+            font-weight: 900;
+            color: var(--sidebar-bg);
+            cursor: pointer;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+            font-size: 1.05rem;
+            transition: transform 0.15s;
+        }
+
+        .wheel-center-btn:hover {
+            transform: translate(-50%, -50%) scale(1.06);
+        }
+
+        .wheel-panel {
+            background: #ffffff;
+            border-radius: 16px;
+            padding: 24px;
+            box-shadow: var(--shadow);
+            width: 340px;
+            max-width: 100%;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        /* MODAL CHUNG */
+        .modal {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(15, 18, 40, 0.62);
+            z-index: 100;
+            justify-content: center;
+            align-items: center;
+            backdrop-filter: blur(4px);
+            padding: 16px;
+        }
+
+        .modal.show {
+            display: flex;
+        }
+
+        .modal-content {
+            background: #ffffff;
+            border-radius: 20px;
+            padding: 30px 34px;
+            max-width: 500px;
+            width: 100%;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 14px;
+            box-shadow: 0 20px 45px rgba(0, 0, 0, 0.25);
+            position: relative;
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 14px;
+            right: 16px;
+            background: #f1f2f6;
+            border: none;
+            width: 34px;
+            height: 34px;
+            border-radius: 50%;
+            font-size: 1rem;
+            cursor: pointer;
+        }
+
+        .modal-emoji {
+            font-size: 3.4rem;
+        }
+
+        .modal-title {
+            font-size: 1.55rem;
+            font-weight: 900;
+            color: #2c3e50;
+        }
+
+        .modal-text {
+            font-size: 1.06rem;
+            line-height: 1.6;
+            color: #34495e;
+        }
+
+        .modal-actions {
+            display: flex;
+            gap: 12px;
+            margin-top: 6px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .pin-input {
+            width: 180px;
+            padding: 10px 14px;
+            font-size: 1.35rem;
+            text-align: center;
+            letter-spacing: 6px;
+            border: 2px solid var(--sidebar-bg);
+            border-radius: 10px;
+            outline: none;
+            font-weight: 800;
+        }
+
+        .pin-error {
+            color: var(--accent-red);
+            font-size: 0.9rem;
+            font-weight: 700;
+            min-height: 20px;
+        }
+
+        .sidebar-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.45);
+            z-index: 35;
+        }
+
+        /* =========================================================
+           11. RESPONSIVE CHO TABLET & ĐIỆN THOẠI
+           ========================================================= */
+        @media (max-width: 1120px) {
+            .keyword-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            .sim-btn-group {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            .practice-layout.has-table {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 900px) {
+            body {
+                height: auto;
+                min-height: 100vh;
+                overflow: auto;
+            }
+            .sidebar {
+                position: fixed;
+                top: 0;
+                left: 0;
+                bottom: 0;
+                transform: translateX(-100%);
+            }
+            .sidebar.open {
+                transform: translateX(0);
+            }
+            .sidebar-overlay.open {
+                display: block;
+            }
+            .mobile-menu-btn {
+                display: inline-flex;
+            }
+            .home-cards-grid,
+            .slide-grid-2,
+            .choice-grid,
+            .dashboard-stats,
+            .score-breakdown-grid {
+                grid-template-columns: 1fr;
+            }
+            .view-pane {
+                padding: 16px;
+            }
+            .home-title {
+                font-size: 1.85rem;
+            }
+            .tf-row {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+        }
+
+        @media (max-width: 560px) {
+            .keyword-grid, .sim-btn-group {
+                grid-template-columns: 1fr;
+            }
+            .content-header {
+                padding: 12px 16px;
+            }
+            .question-card {
+                padding: 18px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="sidebar-overlay" id="sidebarOverlay" onclick="toggleMobileSidebar(false)"></div>
+
+    <!-- SIDEBAR ĐIỀU KHIỂN BÊN TRÁI -->
+    <aside class="sidebar" id="sidebar">
+        <div class="subject-header">
+            <div class="subject-logo">🧪</div>
+            <div class="subject-title-container">
+                <span class="subject-title">HÓA HỌC 11</span>
+                <span class="subject-subtitle">Bài 11. Phương pháp tách biệt và tinh chế</span>
+            </div>
+        </div>
+
+        <nav class="nav-menu">
+            <div class="nav-item active" id="nav-home" onclick="switchPane('pane-home', this)">
+                <span class="nav-icon">🏠</span> <span>Trang chủ</span>
+            </div>
+            <div class="nav-item" id="nav-lesson" onclick="switchPane('pane-lesson', this)">
+                <span class="nav-icon">📖</span> <span>Không gian bài học</span>
+            </div>
+            <div class="nav-item" id="nav-glossary" onclick="switchPane('pane-glossary', this)">
+                <span class="nav-icon">🔤</span> <span>Hệ thống từ khóa</span>
+            </div>
+            <div class="nav-item" id="nav-practice" onclick="switchPane('pane-practice', this)">
+                <span class="nav-icon">✍️</span> <span>Không gian luyện tập</span>
+            </div>
+
+            <!-- SUBMENU ACCORDION 3 PHẦN CHUẨN ĐỀ THI TN THPT 2025 -->
+            <div class="practice-submenu" id="practiceSubmenu">
+                <div class="sub-item active" id="sub-part1" onclick="selectPracticePart(1)">
+                    <span>Phần I. Trắc nghiệm nhiều lựa chọn</span>
+                    <span class="sub-badge">18 câu</span>
+                </div>
+                <div class="question-dots" id="questionDotsPart1"></div>
+
+                <div class="sub-item" id="sub-part2" onclick="selectPracticePart(2)">
+                    <span>Phần II. Trắc nghiệm Đúng / Sai</span>
+                    <span class="sub-badge">4 câu</span>
+                </div>
+                <div class="question-dots" id="questionDotsPart2"></div>
+
+                <div class="sub-item" id="sub-part3" onclick="selectPracticePart(3)">
+                    <span>Phần III. Trắc nghiệm Trả lời ngắn</span>
+                    <span class="sub-badge">6 câu</span>
+                </div>
+                <div class="question-dots" id="questionDotsPart3"></div>
+            </div>
+
+            <div class="nav-item" id="nav-wheel" onclick="switchPane('pane-wheel', this)">
+                <span class="nav-icon">🎡</span> <span>Vòng quay may mắn</span>
+            </div>
+            <div class="nav-item" id="nav-dashboard" onclick="switchPane('pane-dashboard', this)">
+                <span class="nav-icon">🏆</span> <span>Báo cáo kết quả</span>
+            </div>
+        </nav>
+
+        <div class="sidebar-footer">
+            <button class="btn-reset" onclick="openResetModal()">Đặt lại toàn bộ luyện tập 🔄</button>
+        </div>
+    </aside>
+
+    <!-- KHU VỰC HIỂN THỊ CHÍNH -->
+    <main class="main-content">
+
+        <!-- BĂNG RÔN CHẾ ĐỘ GIÁO VIÊN BÍ MẬT -->
+        <div class="teacher-banner" id="teacherBanner">
+            <span>🔓 <strong>CHẾ ĐỘ GIÁO VIÊN ĐANG BẬT</strong> | Đáp án câu hiện tại: <span id="teacherAnswerHint" style="font-size: 1.12rem; color: var(--accent-red); font-weight: 900;">...</span></span>
+            <button onclick="toggleTeacherMode(false)" style="background: var(--accent-red); color: #fff; border: none; padding: 5px 14px; border-radius: 7px; font-weight: 700; cursor: pointer;">Đóng</button>
+        </div>
+
+        <!-- HEADER CHUNG -->
+        <header class="content-header">
+            <div class="header-left">
+                <button class="mobile-menu-btn" onclick="toggleMobileSidebar(true)" aria-label="Mở menu">☰</button>
+                <h2 id="headerPartTitle">Trợ Lý Lớp Học - Trang Chủ</h2>
+            </div>
+            <div class="header-right">
+                <div class="header-progress" id="headerProgress" style="display: none;">Câu 1 / 18</div>
+                <div class="header-score" id="headerScore">Điểm dự kiến: 0,00 / 10,00</div>
+            </div>
+        </header>
+
+        <!-- =====================================================
+             1. TRANG CHỦ (pane-home)
+             ===================================================== -->
+        <section id="pane-home" class="view-pane active">
+            <div class="home-view">
+                <div class="home-logo-box">
+                    <span class="home-logo">🧪</span>
+                    <span class="home-replica-badge">HÓA HỌC 11 • KẾT NỐI TRI THỨC VỚI CUỘC SỐNG • TRANG 63–69</span>
+                </div>
+                <h1 class="home-title">BÀI 11. PHƯƠNG PHÁP TÁCH BIỆT VÀ TINH CHẾ HỢP CHẤT HỮU CƠ</h1>
+
+                <div class="home-cards-grid">
+                    <div class="home-info-card goal-card">
+                        <h3>🎯 MỤC TIÊU BÀI HỌC (SGK tr.63)</h3>
+                        <ul>
+                            <li>Trình bày được nguyên tắc và cách thức tiến hành các phương pháp tách biệt và tinh chế hợp chất hữu cơ: <strong>chưng cất, chiết, kết tinh</strong> và sơ lược về <strong>sắc kí cột</strong>.</li>
+                            <li>Thực hiện được các thí nghiệm về <strong>chưng cất thường, chiết</strong>.</li>
+                            <li>Vận dụng được các phương pháp: <strong>chưng cất thường, chiết, kết tinh</strong> để tách biệt và tinh chế một số hợp chất hữu cơ trong cuộc sống.</li>
+                        </ul>
+                    </div>
+
+                    <div class="home-info-card question-open-card">
+                        <h3>❓ CÂU HỎI MỞ ĐẦU (SGK tr.63)</h3>
+                        <p>“Các hợp chất hữu cơ thu được trong tự nhiên hay bằng con đường tổng hợp trong phòng thí nghiệm thường ở dạng thô, lẫn các tạp chất cần phải loại bỏ. Muốn có được sản phẩm hữu cơ tinh khiết, người ta sử dụng những biện pháp nào?”</p>
+                    </div>
+                </div>
+
+                <button class="btn-start-home" onclick="switchPane('pane-lesson', document.getElementById('nav-lesson'))">
+                    Bắt đầu học ngay 🚀
+                </button>
+            </div>
+        </section>
+
+        <!-- =====================================================
+             2. KHÔNG GIAN BÀI HỌC (pane-lesson) - 5 SLIDE
+             ===================================================== -->
+        <section id="pane-lesson" class="view-pane">
+            <div class="slideshow-container">
+                <div class="slideshow-header">
+                    <span class="slideshow-title">BÀI GIẢNG ĐIỆN TỬ: BÀI 11. PHƯƠNG PHÁP TÁCH BIỆT VÀ TINH CHẾ HỢP CHẤT HỮU CƠ</span>
+                    <div class="slideshow-controls-right">
+                        <button class="btn-speak-slide" id="btnSpeakSlide" onclick="speakCurrentSlide()">🔊 Thuyết minh Slide</button>
+                        <span class="slideshow-index" id="slideIndexLabel">Slide 1 / 5</span>
+                    </div>
+                </div>
+
+                <!-- ĐỒNG HỒ ĐẾM NGƯỢC THẢO LUẬN NHÓM -->
+                <div class="slide-timer-bar">
+                    <div class="timer-display-group">
+                        <span>⏳ Thời gian thảo luận nhóm:</span>
+                        <div class="timer-clock" id="slideTimerClock">02:00</div>
+                    </div>
+                    <div class="timer-controls">
+                        <button class="timer-preset-btn" onclick="setTimerPreset(1)">1 phút</button>
+                        <button class="timer-preset-btn" onclick="setTimerPreset(2)">2 phút</button>
+                        <button class="timer-preset-btn" onclick="setTimerPreset(5)">5 phút</button>
+                        <button class="timer-preset-btn" onclick="setTimerPreset(10)">10 phút</button>
+                        <span style="color: #bdc3c7;">|</span>
+                        <button class="timer-btn timer-btn-start" id="btnStartTimer" onclick="toggleTimer()">▶ Bắt đầu</button>
+                        <button class="timer-btn" onclick="resetTimer()">🔄 Đặt lại</button>
+                    </div>
+                </div>
+
+                <div class="slide-workspace">
+                    <!-- SLIDE 1: PHƯƠNG PHÁP CHƯNG CẤT -->
+                    <div class="slide-content active-slide" id="slide-0">
+                        <h2 class="slide-title">I. Phương pháp Chưng cất (SGK tr.63–65)</h2>
+                        <div class="slide-body">
+                            <div class="sgk-box activity">
+                                <h4>✋ Hoạt động khởi động: Quá trình nấu rượu gạo thủ công (Hình 11.1)</h4>
+                                <ul>
+                                    <li>Gạo nấu chín, để nguội, rắc men, ủ kín 3–5 ngày &rarr; thu hỗn hợp chủ yếu gồm nước, ethanol và bã rượu.</li>
+                                    <li>Đun nóng hỗn hợp trong nồi chưng cất đến nhiệt độ sôi, hơi bay ra đi vào đường ống dẫn qua <strong>thùng nước lạnh</strong> để hóa lỏng và chảy vào bình hứng.</li>
+                                </ul>
+                                <button class="reveal-btn" onclick="toggleReveal('rev-s1')">💡 Xem nhanh đáp án 2 câu hỏi SGK tr.63</button>
+                                <div class="reveal-content" id="rev-s1">
+                                    <p><strong>1. Tỉ lệ ethanol/nước trong bình hứng:</strong> <strong>Giảm dần</strong> trong quá trình chưng cất. Vì ethanol có nhiệt độ sôi (78,3 °C) thấp hơn nước (100 °C) nên bay hơi mạnh ở giai đoạn đầu; càng về sau lượng ethanol cạn dần, tỉ lệ nước bay hơi tăng lên.</p>
+                                    <p><strong>2. Vai trò của thùng nước lạnh:</strong> Làm lạnh đường ống dẫn hơi để hỗn hợp hơi ngưng tụ thành chất lỏng chảy vào bình hứng.</p>
+                                </div>
+                            </div>
+
+                            <div class="slide-grid-2">
+                                <div class="sgk-box">
+                                    <h4>📘 Kiến thức trọng tâm</h4>
+                                    <p><strong>1. Nguyên tắc:</strong> <em>Chưng cất</em> là phương pháp tách chất dựa vào sự khác nhau về <strong>nhiệt độ sôi</strong> của các chất trong hỗn hợp ở một áp suất nhất định.</p>
+                                    <p><strong>2. Cách tiến hành:</strong> Chuyển chất lỏng cần tách sang pha hơi, rồi làm lạnh cho hơi ngưng tụ, thu lấy chất lỏng ở khoảng nhiệt độ thích hợp.</p>
+                                    <p><strong>3. Ứng dụng:</strong> Tách các chất lỏng ra khỏi hỗn hợp các chất có nhiệt độ sôi khác nhau nhằm thu được chất lỏng tinh khiết hơn.</p>
+                                </div>
+
+                                <div class="sgk-box experiment">
+                                    <h4>⚗️ Thí nghiệm: Chưng cất ethanol từ dung dịch ethanol – nước (Hình 11.2)</h4>
+                                    <ul>
+                                        <li>Cho <strong>60 mL</strong> rượu nấu thủ công vào bình cầu có nhánh <strong>250 mL</strong> (chất lỏng <strong>không vượt quá 2/3 thể tích bình</strong>), thêm <strong>vài viên đá bọt</strong> (giúp sôi đều, tránh quá sôi/trào).</li>
+                                        <li>Đun nóng từ từ; khi nhiệt độ trên nhiệt kế ổn định rồi bắt đầu tăng trở lại thì <strong>tắt nguồn nhiệt</strong>, ngừng chưng cất.</li>
+                                        <li><strong>Kết quả:</strong> Độ cồn của sản phẩm trong bình hứng <strong>tăng lên</strong> so với rượu ban đầu.</li>
+                                    </ul>
+                                </div>
+                            </div>
+
+                            <div class="sgk-box know">
+                                <h4>❗ Em có biết (SGK tr.65)</h4>
+                                <ul>
+                                    <li><strong>Chưng cất phân đoạn (Hình 11.3):</strong> Dùng <em>cột cất phân đoạn</em> để tách hai hay nhiều chất lỏng có nhiệt độ sôi khác nhau không nhiều và tan lẫn hoàn toàn trong nhau.</li>
+                                    <li><strong>Chưng cất lôi cuốn hơi nước (Hình 11.4):</strong> Các chất có nhiệt độ sôi cao, không tan trong nước (như tinh dầu) vẫn tách được ở nhiệt độ xấp xỉ nhiệt độ sôi của nước; hỗn hợp ngưng tụ tách 2 lớp: <strong>lớp tinh dầu ở trên, lớp nước ở dưới</strong>.</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- SLIDE 2: PHƯƠNG PHÁP CHIẾT -->
+                    <div class="slide-content" id="slide-1">
+                        <h2 class="slide-title">II. Phương pháp Chiết (SGK tr.65–66)</h2>
+                        <div class="slide-body">
+                            <div class="slide-grid-2">
+                                <div class="sgk-box">
+                                    <h4>📘 Nguyên tắc & Cách tiến hành</h4>
+                                    <p><strong>1. Nguyên tắc:</strong> <em>Chiết</em> là phương pháp tách biệt và tinh chế hỗn hợp các chất dựa vào sự <strong>hoà tan khác nhau</strong> của chúng trong <strong>hai môi trường không trộn lẫn vào nhau</strong>.</p>
+                                    <p><strong>2. Cách tiến hành:</strong></p>
+                                    <ul>
+                                        <li><strong>Chiết lỏng – lỏng (Hình 11.5):</strong> Tách chất hữu cơ hòa tan trong nước bằng dung môi hòa tan tốt chất cần chiết, không trộn lẫn với dung môi ban đầu và có nhiệt độ sôi thấp. Dùng <em>phễu chiết</em>; chất lỏng có khối lượng riêng nhỏ hơn tách thành <strong>lớp ở phía trên</strong>. Lặp lại nhiều lần rồi chưng cất dung môi thu chất hữu cơ.</li>
+                                        <li><strong>Chiết lỏng – rắn:</strong> Dùng dung môi lỏng hòa tan chất hữu cơ để tách khỏi hỗn hợp rắn.</li>
+                                    </ul>
+                                    <p><strong>3. Ứng dụng:</strong> Chiết lỏng – lỏng tách chất ở dạng nhũ tương hoặc huyền phù trong nước; Chiết lỏng – rắn dùng ngâm rượu thuốc, phân tích thổ nhưỡng, phân tích dư lượng thuốc bảo vệ thực vật trong nông sản.</p>
+                                </div>
+
+                                <div style="display: flex; flex-direction: column; gap: 14px;">
+                                    <div class="sgk-box experiment">
+                                        <h4>🧪 Thí nghiệm: Tách β-carotene từ nước ép cà rốt (SGK tr.66)</h4>
+                                        <ul>
+                                            <li>Cho khoảng <strong>20 mL nước ép cà rốt</strong> + <strong>20 mL hexane</strong> vào phễu chiết 60 mL, lắc đều khoảng <strong>2 phút</strong>.</li>
+                                            <li>Để yên trên giá thí nghiệm khoảng <strong>5 phút</strong> cho tách thành 2 lớp.</li>
+                                            <li>Mở khóa phễu chiết cho <strong>phần nước ở dưới chảy xuống</strong>, giữ lại lớp <strong>dung dịch β-carotene trong hexane ở trên</strong> (chuyển từ không màu sang màu <strong>vàng cam</strong>).</li>
+                                        </ul>
+                                    </div>
+
+                                    <div class="sgk-box know">
+                                        <h4>❗ Em có biết: Phương pháp ngâm chiết (Hình 11.6)</h4>
+                                        <ul>
+                                            <li><strong>Ngâm lạnh:</strong> Phổ biến với đa số dược liệu; cho dược liệu và rượu vào bình kín, đặt nơi tối, mát trong <strong>10–15 ngày</strong>.</li>
+                                            <li><strong>Ngâm nóng:</strong> Áp dụng cho dược liệu rắn chắc, khó chiết, chịu nhiệt; đun cách thủy đến sôi rồi đổ sang bình ngâm đậy kín <strong>7–10 ngày</strong>.</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- SLIDE 3: PHƯƠNG PHÁP KẾT TINH -->
+                    <div class="slide-content" id="slide-2">
+                        <h2 class="slide-title">III. Phương pháp Kết tinh (SGK tr.67–68)</h2>
+                        <div class="slide-body">
+                            <div class="sgk-box">
+                                <h4>📘 1. Nguyên tắc & 2. Cách tiến hành (Hình 11.7a–d)</h4>
+                                <p><strong>Nguyên tắc:</strong> <em>Kết tinh</em> là phương pháp tách biệt và tinh chế hỗn hợp các <strong>chất rắn</strong> dựa vào <strong>độ tan khác nhau</strong> và <strong>sự thay đổi độ tan của chúng theo nhiệt độ</strong>.</p>
+                                <ol style="margin-top: 8px;">
+                                    <li><strong>Bước a (Hòa tan nóng):</strong> Hòa tan chất rắn lẫn tạp chất vào dung môi (nước, ethanol, acetone, ether, ethyl acetate,...) tạo dung dịch bão hòa ở nhiệt độ cao. Dung môi cần hòa tan tốt chất cần tinh chế ở nhiệt độ cao và hòa tan kém ở nhiệt độ thấp.</li>
+                                    <li><strong>Bước b (Lọc nóng):</strong> Lọc nóng để loại bỏ các tạp chất không tan.</li>
+                                    <li><strong>Bước c (Làm lạnh kết tinh):</strong> Để nguội và làm lạnh dung dịch thu được, chất cần tinh chế giảm mạnh độ tan và kết tinh tách ra.</li>
+                                    <li><strong>Bước d (Lọc thu tinh thể):</strong> Lọc để thu chất rắn. Thực hiện kết tinh lại nhiều lần sẽ thu được tinh thể có độ tinh khiết cao hơn.</li>
+                                </ol>
+                            </div>
+
+                            <div class="sgk-box activity">
+                                <h4>✋ 3. Ứng dụng & Thực tế: Tinh chế đường đỏ thành đường trắng (SGK tr.68)</h4>
+                                <p>Phương pháp kết tinh dùng để tách và tinh chế các chất rắn. Với đường đỏ (làm từ mật mía, còn chứa chất màu và tạp chất):</p>
+                                <ul>
+                                    <li>Hòa tan đường đỏ vào <strong>nước nóng</strong>, thêm <strong>than hoạt tính</strong> để khử màu, khuấy, lọc thu dung dịch trong suốt không màu.</li>
+                                    <li>Cô bớt nước, để nguội thu được <strong>đường trắng</strong> ở dạng tinh thể.</li>
+                                </ul>
+                                <button class="reveal-btn" onclick="toggleReveal('rev-s3')">💡 Trả lời câu hỏi SGK tr.68</button>
+                                <div class="reveal-content" id="rev-s3">
+                                    <strong>Kết luận:</strong> Trong hai loại đường đỏ và đường trắng, <strong>đường trắng tinh khiết hơn</strong> vì đã trải qua quá trình khử màu bằng than hoạt tính, lọc bỏ tạp chất không tan và kết tinh lại.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- SLIDE 4: SẮC KÍ CỘT & TỔNG KẾT -->
+                    <div class="slide-content" id="slide-3">
+                        <h2 class="slide-title">IV. Sắc kí cột & Tổng kết bài học (SGK tr.68–69)</h2>
+                        <div class="slide-body">
+                            <div class="slide-grid-2">
+                                <div class="sgk-box">
+                                    <h4>📊 Sắc kí cột (Hình 11.8)</h4>
+                                    <p><strong>1. Nguyên tắc:</strong> Dựa vào sự <strong>phân bố khác nhau</strong> của các chất giữa hai pha: <strong>pha động</strong> (dung môi và dung dịch mẫu di chuyển qua cột) và <strong>pha tĩnh</strong> (chất rắn có diện tích bề mặt rất lớn, khả năng hấp phụ khác nhau như <em>silica gel, aluminium oxide,...</em>).</p>
+                                    <p style="margin-top: 6px;"><strong>2. Cách tiến hành:</strong> Nhồi chất hấp phụ dạng bột (pha tĩnh) vào cột thủy tinh &rarr; cho hỗn hợp cần tách lên cột &rarr; cho dung môi thích hợp chảy liên tục qua cột &rarr; thu từng phân đoạn riêng &rarr; loại bỏ dung môi thu chất cần tách.</p>
+                                    <p style="margin-top: 6px;"><strong>3. Ứng dụng:</strong> Tách các chất hữu cơ có <strong>hàm lượng nhỏ</strong> và <strong>khó tách ra khỏi nhau</strong>.</p>
+                                </div>
+
+                                <div class="sgk-box summary">
+                                    <h4>🌟 Em đã học & Em có thể (SGK tr.69)</h4>
+                                    <ul>
+                                        <li><strong>Chưng cất:</strong> Dựa vào sự khác nhau về nhiệt độ sôi ở một áp suất nhất định.</li>
+                                        <li><strong>Chiết:</strong> Dựa vào sự hòa tan khác nhau trong hai dung môi không trộn lẫn.</li>
+                                        <li><strong>Kết tinh:</strong> Dựa vào độ hòa tan khác nhau và độ tan chất cần tách giảm nhanh khi giảm nhiệt độ.</li>
+                                        <li><strong>Sắc kí cột:</strong> Dựa vào sự phân bố khác nhau giữa pha động và pha tĩnh.</li>
+                                        <li><strong>Vận dụng:</strong> Tách tinh dầu vỏ bưởi, cam, chanh bằng chưng cất và chiết; tinh chế đường mía bằng kết tinh.</li>
+                                    </ul>
+                                </div>
+                            </div>
+
+                            <div class="sgk-box know">
+                                <h4>❓ Giải đáp nhanh Câu hỏi 3 (SGK tr.69)</h4>
+                                <p>Cho biết bản chất các cách làm sau thuộc phương pháp tách biệt và tinh chế nào?</p>
+                                <button class="reveal-btn" onclick="toggleReveal('rev-s4')">💡 Xem đáp án chi tiết a, b, c, d</button>
+                                <div class="reveal-content" id="rev-s4">
+                                    <ul>
+                                        <li><strong>a)</strong> Giã lá cây chàm, cho vào nước, lọc lấy dung dịch màu để nhuộm sợi, vải &rarr; <strong>Chiết lỏng – rắn</strong>.</li>
+                                        <li><strong>b)</strong> Nấu rượu uống &rarr; <strong>Chưng cất</strong>.</li>
+                                        <li><strong>c)</strong> Ngâm rượu thuốc &rarr; <strong>Chiết lỏng – rắn</strong>.</li>
+                                        <li><strong>d)</strong> Làm đường cát, đường phèn từ nước mía &rarr; <strong>Kết tinh</strong>.</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- SLIDE 5: PHÒNG THÍ NGHIỆM ẢO TƯƠNG TÁC (4 MÔ PHỎNG SVG) -->
+                    <div class="slide-content" id="slide-4">
+                        <h2 class="slide-title">V. Phòng thí nghiệm ảo tương tác (Bám sát 4 hình SGK)</h2>
+                        <div class="slide-body">
+                            <div class="simulation-container">
+                                <div class="sim-btn-group">
+                                    <button class="btn-sim-option active" onclick="runSim(1)">⚗️ 1. Chưng cất thường (H.11.2)</button>
+                                    <button class="btn-sim-option" onclick="runSim(2)">🧪 2. Chiết β-carotene (H.11.5)</button>
+                                    <button class="btn-sim-option" onclick="runSim(3)">💎 3. Kết tinh 4 bước (H.11.7)</button>
+                                    <button class="btn-sim-option" onclick="runSim(4)">📊 4. Sắc kí cột (H.11.8)</button>
+                                </div>
+
+                                <div class="sim-visual-box" id="simVisual"></div>
+                                <div class="sim-desc-box" id="simDesc"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="slideshow-footer">
+                    <button class="slide-nav-btn" onclick="navigateSlide(-1)">◀ Slide Trước</button>
+                    <div class="slide-progress-wrapper">
+                        <input type="range" class="slide-progress-bar" id="slideProgressBar" min="0" max="4" value="0" oninput="jumpToSlide(this.value)">
+                    </div>
+                    <button class="slide-nav-btn" onclick="navigateSlide(1)">Slide Tiếp ▶</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- =====================================================
+             3. HỆ THỐNG TỪ KHÓA (pane-glossary) - 8 THẺ LẬT 3D
+             ===================================================== -->
+        <section id="pane-glossary" class="view-pane">
+            <h2 style="margin-bottom: 20px; color: var(--sidebar-bg); font-size: 1.55rem; font-weight: 800; border-left: 6px solid var(--accent-orange); padding-left: 14px;">
+                Hệ Thống Từ Khóa Cốt Lõi — 8 Thẻ Lật 3D (Bám sát SGK tr.63–69)
+            </h2>
+            <div class="keyword-grid">
+                <!-- 1 -->
+                <div class="keyword-card" onclick="this.classList.toggle('flipped')">
+                    <div class="keyword-inner">
+                        <div class="keyword-front">
+                            <span class="keyword-symbol">⚗️</span>
+                            <h3>Chưng cất thường<br><small>(Hình 11.2)</small></h3>
+                            <p class="keyword-hint">Chạm hoặc di chuột để lật thẻ</p>
+                        </div>
+                        <div class="keyword-back">
+                            <h4>Chưng cất thường</h4>
+                            <p>Tách các chất lỏng có nhiệt độ sôi khác nhau nhiều ở áp suất nhất định. Chất lỏng hóa hơi khi đun, đi qua ống sinh hàn làm lạnh và ngưng tụ vào bình hứng (VD: chưng cất ethanol từ rượu gạo).</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 2 -->
+                <div class="keyword-card" onclick="this.classList.toggle('flipped')">
+                    <div class="keyword-inner">
+                        <div class="keyword-front">
+                            <span class="keyword-symbol">🏭</span>
+                            <h3>Chưng cất phân đoạn &amp; Lôi cuốn hơi nước</h3>
+                            <p class="keyword-hint">Hình 11.3 &amp; Hình 11.4</p>
+                        </div>
+                        <div class="keyword-back">
+                            <h4>Phân đoạn &amp; Lôi cuốn hơi nước</h4>
+                            <p><strong>Phân đoạn:</strong> Dùng cột cất phân đoạn tách các chất lỏng sôi gần nhau, tan lẫn hoàn toàn.<br><strong>Lôi cuốn hơi nước:</strong> Tách chất sôi cao, không tan trong nước (tinh dầu) ở nhiệt độ xấp xỉ 100 °C.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 3 -->
+                <div class="keyword-card" onclick="this.classList.toggle('flipped')">
+                    <div class="keyword-inner">
+                        <div class="keyword-front">
+                            <span class="keyword-symbol">🧪</span>
+                            <h3>Chiết lỏng – lỏng<br><small>(Hình 11.5)</small></h3>
+                            <p class="keyword-hint">Chạm hoặc di chuột để lật thẻ</p>
+                        </div>
+                        <div class="keyword-back">
+                            <h4>Chiết lỏng – lỏng</h4>
+                            <p>Dùng phễu chiết tách chất hữu cơ hòa tan trong nước sang dung môi không trộn lẫn, sôi thấp. Chất lỏng có khối lượng riêng nhỏ hơn nổi ở lớp trên (VD: dùng hexane tách β-carotene từ nước ép cà rốt).</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 4 -->
+                <div class="keyword-card" onclick="this.classList.toggle('flipped')">
+                    <div class="keyword-inner">
+                        <div class="keyword-front">
+                            <span class="keyword-symbol">🌿</span>
+                            <h3>Chiết lỏng – rắn &amp; Ngâm chiết</h3>
+                            <p class="keyword-hint">Hình 11.6</p>
+                        </div>
+                        <div class="keyword-back">
+                            <h4>Chiết lỏng – rắn &amp; Ngâm chiết</h4>
+                            <p>Dùng dung môi lỏng hòa tan chất hữu cơ khỏi hỗn hợp rắn (ngâm rượu thuốc, nhuộm lá chàm, phân tích thổ nhưỡng). Gồm ngâm lạnh (10–15 ngày) và ngâm nóng (đun cách thủy, ngâm 7–10 ngày).</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 5 -->
+                <div class="keyword-card" onclick="this.classList.toggle('flipped')">
+                    <div class="keyword-inner">
+                        <div class="keyword-front">
+                            <span class="keyword-symbol">💎</span>
+                            <h3>Phương pháp Kết tinh<br><small>(Hình 11.7)</small></h3>
+                            <p class="keyword-hint">Chạm hoặc di chuột để lật thẻ</p>
+                        </div>
+                        <div class="keyword-back">
+                            <h4>Phương pháp Kết tinh</h4>
+                            <p>Tinh chế chất rắn dựa vào độ tan khác nhau và độ tan giảm nhanh khi hạ nhiệt độ. Gồm 4 bước: (a) Hòa tan bão hòa nóng &rarr; (b) Lọc nóng &rarr; (c) Làm lạnh kết tinh &rarr; (d) Lọc thu tinh thể.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 6 -->
+                <div class="keyword-card" onclick="this.classList.toggle('flipped')">
+                    <div class="keyword-inner">
+                        <div class="keyword-front">
+                            <span class="keyword-symbol">🍚</span>
+                            <h3>Tinh chế đường &amp; Than hoạt tính</h3>
+                            <p class="keyword-hint">SGK trang 68</p>
+                        </div>
+                        <div class="keyword-back">
+                            <h4>Tinh chế đường đỏ thành đường trắng</h4>
+                            <p>Hòa tan đường đỏ vào nước nóng, thêm than hoạt tính để hấp phụ và khử màu, lọc bỏ tạp chất không tan rồi cô bớt nước, để nguội thu tinh thể đường trắng tinh khiết hơn.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 7 -->
+                <div class="keyword-card" onclick="this.classList.toggle('flipped')">
+                    <div class="keyword-inner">
+                        <div class="keyword-front">
+                            <span class="keyword-symbol">📊</span>
+                            <h3>Sắc kí cột<br><small>(Hình 11.8)</small></h3>
+                            <p class="keyword-hint">Chạm hoặc di chuột để lật thẻ</p>
+                        </div>
+                        <div class="keyword-back">
+                            <h4>Sắc kí cột</h4>
+                            <p>Tách hỗn hợp dựa vào sự phân bố khác nhau giữa pha động (dung môi + mẫu) và pha tĩnh (silica gel, aluminium oxide). Rất hiệu quả để tách chất hữu cơ có hàm lượng nhỏ và khó tách.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 8 -->
+                <div class="keyword-card" onclick="this.classList.toggle('flipped')">
+                    <div class="keyword-inner">
+                        <div class="keyword-front">
+                            <span class="keyword-symbol">🛠️</span>
+                            <h3>Đá bọt &amp; Ống sinh hàn</h3>
+                            <p class="keyword-hint">Kỹ thuật thực hành</p>
+                        </div>
+                        <div class="keyword-back">
+                            <h4>Đá bọt &amp; Ống sinh hàn</h4>
+                            <p><strong>Đá bọt:</strong> Giúp hỗn hợp sôi đều, tránh quá sôi gây trào.<br><strong>Ống sinh hàn:</strong> Nước lạnh đi vào từ đầu dưới (gần bình hứng) và ra đầu trên (gần bình cầu) để ngập đầy ống, ngưng tụ tối đa.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- =====================================================
+             4. KHÔNG GIAN LUYỆN TẬP (pane-practice)
+             ===================================================== -->
+        <section id="pane-practice" class="view-pane">
+            <div class="practice-layout" id="practiceLayout">
+
+                <!-- CỘT TRÁI: BẢNG SỐ LIỆU / BỐI CẢNH (PHẦN III) -->
+                <div class="data-box" id="dataBox">
+                    <div class="data-title" id="dataTitle">BẢNG DỮ LIỆU THỰC NGHIỆM</div>
+                    <div class="data-table-container" id="dataTableContainer"></div>
+                    <div class="data-source">Nguồn: SGK Hóa học 11 — Kết nối tri thức với cuộc sống (tr.63–69)</div>
+                </div>
+
+                <!-- CỘT PHẢI: THẺ CÂU HỎI -->
+                <div class="question-card">
+                    <div class="question-top-row">
+                        <div class="question-badge" id="questionBadge">Phần I • Câu 1 / 18</div>
+                        <div class="level-badge" id="levelBadge">Nhận biết • 0,25 điểm</div>
+                    </div>
+
+                    <div class="question-text">
+                        <span id="questionText">Đang tải câu hỏi...</span>
+                        <button type="button" class="keyword-toggle" id="stemToggle" aria-pressed="false" onclick="togglePracticeKeywords()">bấm vào để hiện từ khóa</button>
+                    </div>
+
+                    <!-- PHẦN I: 4 LỰA CHỌN -->
+                    <div class="choice-grid" id="multipleChoiceArea">
+                        <button class="choice-btn" onclick="selectChoice('A')">
+                            <span class="choice-letter">A</span>
+                            <span class="choice-val" id="choiceA">...</span>
+                        </button>
+                        <button class="choice-btn" onclick="selectChoice('B')">
+                            <span class="choice-letter">B</span>
+                            <span class="choice-val" id="choiceB">...</span>
+                        </button>
+                        <button class="choice-btn" onclick="selectChoice('C')">
+                            <span class="choice-letter">C</span>
+                            <span class="choice-val" id="choiceC">...</span>
+                        </button>
+                        <button class="choice-btn" onclick="selectChoice('D')">
+                            <span class="choice-letter">D</span>
+                            <span class="choice-val" id="choiceD">...</span>
+                        </button>
+                    </div>
+
+                    <!-- PHẦN II: ĐÚNG / SAI 4 Ý CHUẨN ĐỀ THI TN THPT 2025 -->
+                    <div class="tf-list" id="trueFalseArea">
+                        <div id="tfStatementsContainer" style="display: flex; flex-direction: column; gap: 10px;"></div>
+                        <div class="tf-submit-bar">
+                            <span class="tf-scoring-note">📏 Thang điểm Bộ GD&amp;ĐT: 1 ý = 0,10đ • 2 ý = 0,25đ • 3 ý = 0,50đ • 4 ý = 1,00đ</span>
+                            <button class="btn-confirm" onclick="submitTrueFalseQuestion()">Chấm điểm câu này ✔</button>
+                        </div>
+                    </div>
+
+                    <!-- PHẦN III: TRẢ LỜI NGẮN -->
+                    <div class="short-answer-container" id="shortAnswerArea">
+                        <label class="answer-label" for="numberAnswer">Đáp án (tối đa 4 ký tự):</label>
+                        <input class="number-answer" id="numberAnswer" type="text" maxlength="5" inputmode="decimal" autocomplete="off" placeholder="VD: 21,7" onkeydown="if(event.key === 'Enter') verifyShortAnswer()">
+                        <button class="btn-confirm" onclick="verifyShortAnswer()">Xác nhận ✔</button>
+                    </div>
+
+                    <!-- HỘP PHẢN HỒI & LỜI GIẢI CHI TIẾT -->
+                    <div id="practiceFeedback" aria-live="polite" hidden></div>
+
+                    <!-- THANH ĐIỀU HƯỚNG -->
+                    <div class="practice-toolbar">
+                        <button class="btn-nav" id="btnPrev" onclick="navigateQuestion(-1)">◀ Câu trước</button>
+                        <div style="display: flex; gap: 8px;">
+                            <button class="icon-btn" title="Đọc to câu hỏi" onclick="readQuestionAudio()">🔊</button>
+                            <button class="icon-btn" title="Làm lại câu này" onclick="resetCurrentQuestion()">🔄</button>
+                            <button class="icon-btn" title="Chế độ giáo viên (PIN: 1234)" onclick="openTeacherPinModal()">🔑</button>
+                        </div>
+                        <button class="btn-nav" id="btnNext" onclick="navigateQuestion(1)">Câu tiếp ▶</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- =====================================================
+             5. VÒNG QUAY MAY MẮN (pane-wheel)
+             ===================================================== -->
+        <section id="pane-wheel" class="view-pane">
+            <div class="wheel-workspace">
+                <div class="wheel-box">
+                    <canvas id="wheelCanvas" width="420" height="420"></canvas>
+                    <div class="wheel-pointer"></div>
+                    <button class="wheel-center-btn" onclick="spinWheel()">QUAY</button>
+                </div>
+
+                <div class="wheel-panel">
+                    <h3 style="color: var(--sidebar-bg); font-size: 1.2rem;">🎡 Danh sách học sinh</h3>
+                    <p style="font-size: 0.88rem; color: #7f8c8d;">Nhập danh sách tên học sinh (mỗi bạn 1 dòng):</p>
+                    <textarea id="namesInput" rows="8" style="width: 100%; border: 1.5px solid var(--border-color); border-radius: 10px; padding: 10px; font-size: 0.96rem; outline: none; resize: vertical;" oninput="updateNamesFromInput()"></textarea>
+                    <button onclick="resetWheelNames()" style="background: #f1f2f6; border: 1.5px solid var(--border-color); padding: 10px; border-radius: 8px; font-weight: 700; cursor: pointer; color: #2c3e50;">Khôi phục danh sách mẫu</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- =====================================================
+             6. BÁO CÁO KẾT QUẢ (pane-dashboard)
+             ===================================================== -->
+        <section id="pane-dashboard" class="view-pane">
+            <div class="dashboard-container">
+                <div class="score-hero-card">
+                    <div class="score-hero-main">
+                        <span style="font-size: 0.95rem; font-weight: 700; opacity: 0.9; text-transform: uppercase;">Tổng điểm chuẩn Đề thi Tốt nghiệp THPT 2025</span>
+                        <div class="score-hero-number" id="dashTotalScore">0,00 / 10,00</div>
+                        <span style="font-size: 0.9rem; opacity: 0.85;">Thang điểm 10 gồm 3 phần (28 câu hỏi chuẩn ma trận Bộ GD&amp;ĐT)</span>
+                    </div>
+
+                    <div class="score-breakdown-grid">
+                        <div class="breakdown-pill">
+                            <div class="bp-label">Phần I (18 câu)</div>
+                            <div class="bp-val" id="dashScoreP1">0,00 / 4,50đ</div>
+                        </div>
+                        <div class="breakdown-pill">
+                            <div class="bp-label">Phần II (4 câu)</div>
+                            <div class="bp-val" id="dashScoreP2">0,00 / 4,00đ</div>
+                        </div>
+                        <div class="breakdown-pill">
+                            <div class="bp-label">Phần III (6 câu)</div>
+                            <div class="bp-val" id="dashScoreP3">0,00 / 1,50đ</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="dashboard-stats">
+                    <div class="stat-card">
+                        <div class="stat-value" id="statTotalSolved">0 / 28</div>
+                        <div class="stat-label">Số câu đã hoàn thành</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value success" id="statFullCorrect">0</div>
+                        <div class="stat-label">Số câu đạt điểm tối đa</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value error" id="statNeedReview">0</div>
+                        <div class="stat-label">Số câu cần ôn lại</div>
+                    </div>
+                </div>
+
+                <div class="progress-section">
+                    <div class="progress-info">
+                        <span>Tỷ lệ hoàn thành toàn đề:</span>
+                        <span id="statProgressPct">0%</span>
+                    </div>
+                    <div class="progress-bar-bg">
+                        <div class="progress-bar-fill" id="statProgressBar"></div>
+                    </div>
+                </div>
+
+                <div class="part-progress-box">
+                    <h3 style="color: #2c3e50; margin-bottom: 14px;">Trạng thái 28 câu hỏi (Nhấn vào số câu để quay lại ôn tập ngay)</h3>
+
+                    <div style="margin-bottom: 16px;">
+                        <h4 style="color: var(--sidebar-bg);">Phần I — Trắc nghiệm nhiều lựa chọn (18 câu × 0,25đ)</h4>
+                        <div class="dashboard-grid" id="dashGridPart1"></div>
+                    </div>
+
+                    <div style="margin-bottom: 16px;">
+                        <h4 style="color: var(--sidebar-bg);">Phần II — Trắc nghiệm Đúng / Sai 4 ý (4 câu × 1,00đ)</h4>
+                        <div class="dashboard-grid" id="dashGridPart2"></div>
+                    </div>
+
+                    <div>
+                        <h4 style="color: var(--sidebar-bg);">Phần III — Trắc nghiệm Trả lời ngắn (6 câu × 0,25đ)</h4>
+                        <div class="dashboard-grid" id="dashGridPart3"></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- =========================================================
+         CÁC HỘP THOẠI MODAL TÙY CHỈNH (KHÔNG DÙNG ALERT/CONFIRM/PROMPT)
+         ========================================================= -->
+    <!-- 1. Modal thông báo chung (Vòng quay, Hết giờ, Thông báo) -->
+    <div class="modal" id="infoModal">
+        <div class="modal-content">
+            <button class="modal-close" onclick="closeModal('infoModal')">✕</button>
+            <div class="modal-emoji" id="infoModalEmoji">🎉</div>
+            <div class="modal-title" id="infoModalTitle">THÔNG BÁO</div>
+            <div class="modal-text" id="infoModalText">...</div>
+            <div class="modal-actions">
+                <button class="btn-confirm" style="background: var(--accent-teal);" onclick="closeModal('infoModal')">Đóng</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 2. Modal xác nhận đặt lại luyện tập -->
+    <div class="modal" id="resetModal">
+        <div class="modal-content">
+            <button class="modal-close" onclick="closeModal('resetModal')">✕</button>
+            <div class="modal-emoji">🔄</div>
+            <div class="modal-title">Đặt lại toàn bộ luyện tập?</div>
+            <div class="modal-text">Toàn bộ đáp án và điểm số đã lưu của 28 câu hỏi sẽ bị xóa để bắt đầu lượt luyện tập mới. Thầy cô / học sinh có chắc chắn không?</div>
+            <div class="modal-actions">
+                <button class="btn-nav" onclick="closeModal('resetModal')">Hủy bỏ</button>
+                <button class="btn-confirm" style="background: var(--accent-red);" onclick="confirmResetPractice()">Đồng ý xóa</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 3. Modal nhập mã PIN Chế độ Giáo viên -->
+    <div class="modal" id="teacherPinModal">
+        <div class="modal-content">
+            <button class="modal-close" onclick="closeModal('teacherPinModal')">✕</button>
+            <div class="modal-emoji">🔑</div>
+            <div class="modal-title">Chế độ Giáo viên</div>
+            <div class="modal-text">Nhập mã PIN bảo mật (mặc định: <strong>1234</strong>) để hiển thị băng rôn đáp án gợi ý:</div>
+            <input type="password" id="teacherPinInput" class="pin-input" maxlength="6" placeholder="••••" onkeydown="if(event.key==='Enter') verifyTeacherPin()">
+            <div class="pin-error" id="teacherPinError"></div>
+            <div class="modal-actions">
+                <button class="btn-nav" onclick="closeModal('teacherPinModal')">Hủy</button>
+                <button class="btn-confirm" onclick="verifyTeacherPin()">Mở khóa 🔓</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        /* =========================================================
+           1. NGÂN HÀNG 28 CÂU HỎI CHUẨN ĐỀ THI TN THPT 2025
+              (BÁM SÁT 100% SGK HÓA HỌC 11 KNTT TRANG 63–69)
+           ========================================================= */
+        const STORAGE_KEY = 'H11_B11_TN2025';
+
+        const quizData = {
+            1: [
+                {
+                    level: "Nhận biết",
+                    q: "Phương pháp chưng cất tách biệt các chất dựa trên nguyên tắc nào sau đây?",
+                    keywords: ["chưng cất", "nguyên tắc"],
+                    choices: [
+                        "Sự khác nhau về nhiệt độ sôi của các chất trong hỗn hợp ở một áp suất nhất định.",
+                        "Sự hòa tan khác nhau của các chất trong hai môi trường không trộn lẫn.",
+                        "Sự thay đổi độ tan của các chất rắn theo nhiệt độ.",
+                        "Sự phân bố khác nhau của các chất giữa pha động và pha tĩnh."
+                    ],
+                    optionFocus: ["nhiệt độ sôi", "hai môi trường không trộn lẫn", "độ tan của các chất rắn", "pha động và pha tĩnh"],
+                    answer: "A",
+                    explain: "Theo SGK Hóa học 11 (tr.63), chưng cất là phương pháp tách chất dựa vào sự khác nhau về nhiệt độ sôi của các chất trong hỗn hợp ở một áp suất nhất định."
+                },
+                {
+                    level: "Nhận biết",
+                    q: "Trong quá trình nấu rượu gạo thủ công (Hình 11.1), vai trò của thùng nước lạnh là gì?",
+                    keywords: ["nấu rượu gạo thủ công", "thùng nước lạnh", "vai trò"],
+                    choices: [
+                        "Cung cấp nhiệt để đun sôi hỗn hợp nước, ethanol và bã rượu.",
+                        "Làm lạnh để hỗn hợp hơi trong ống dẫn ngưng tụ thành chất lỏng chảy vào bình hứng.",
+                        "Hòa tan chọn lọc ethanol ra khỏi bã rượu.",
+                        "Hấp phụ các tạp chất màu có trong rượu gạo."
+                    ],
+                    optionFocus: ["Cung cấp nhiệt", "Làm lạnh", "ngưng tụ thành chất lỏng", "Hòa tan chọn lọc", "Hấp phụ"],
+                    answer: "B",
+                    explain: "Hỗn hợp hơi bay ra từ nồi chưng cất đi vào ống dẫn đặt qua thùng nước lạnh sẽ tỏa nhiệt, hóa lỏng (ngưng tụ) và chảy vào bình hứng."
+                },
+                {
+                    level: "Thông hiểu",
+                    q: "Trong thí nghiệm chưng cất ethanol từ dung dịch ethanol – nước (Hình 11.2), người ta cho thêm vài viên đá bọt vào bình cầu có nhánh nhằm mục đích gì?",
+                    keywords: ["chưng cất ethanol", "vài viên đá bọt", "mục đích"],
+                    choices: [
+                        "Làm tăng nhiệt độ sôi của ethanol lên ngang bằng nhiệt độ sôi của nước.",
+                        "Hấp phụ hoàn toàn lượng nước có trong bình cầu.",
+                        "Điều hòa quá trình sôi, tránh hiện tượng quá sôi gây trào chất lỏng.",
+                        "Làm xúc tác cho phản ứng chuyển hóa nước thành ethanol."
+                    ],
+                    optionFocus: ["tăng nhiệt độ sôi", "Hấp phụ hoàn toàn", "Điều hòa quá trình sôi", "quá sôi", "xúc tác"],
+                    answer: "C",
+                    explain: "Đá bọt có nhiều lỗ xốp nhỏ tạo tâm sôi, giúp chất lỏng sôi đều và êm, tránh hiện tượng quá sôi gây bắn trào hỗn hợp lên nhánh ống sinh hàn."
+                },
+                {
+                    level: "Nhận biết",
+                    q: "Khi tiến hành thí nghiệm chưng cất ethanol từ rượu nấu thủ công bằng bình cầu có nhánh 250 mL (SGK tr.64), thể tích chất lỏng cho vào bình không được vượt quá bao nhiêu?",
+                    keywords: ["bình cầu có nhánh", "không được vượt quá"],
+                    choices: [
+                        "1/3 thể tích bình.",
+                        "1/2 thể tích bình.",
+                        "2/3 thể tích bình.",
+                        "3/4 thể tích bình."
+                    ],
+                    optionFocus: ["1/3", "1/2", "2/3", "3/4"],
+                    answer: "C",
+                    explain: "SGK tr.64 lưu ý: Cho 60 mL rượu nấu thủ công vào bình cầu có nhánh 250 mL và chú ý chất lỏng trong bình không vượt quá 2/3 thể tích bình để tránh sôi trào."
+                },
+                {
+                    level: "Nhận biết",
+                    q: "Để tách hai hay nhiều chất lỏng có nhiệt độ sôi khác nhau không nhiều và tan lẫn hoàn toàn trong nhau, người ta sử dụng phương pháp nào?",
+                    keywords: ["nhiệt độ sôi khác nhau không nhiều", "tan lẫn hoàn toàn"],
+                    choices: [
+                        "Chưng cất thường.",
+                        "Chưng cất phân đoạn.",
+                        "Chiết lỏng – lỏng.",
+                        "Phương pháp kết tinh."
+                    ],
+                    optionFocus: ["Chưng cất thường", "Chưng cất phân đoạn", "Chiết lỏng – lỏng", "kết tinh"],
+                    answer: "B",
+                    explain: "Theo mục Em có biết (SGK tr.65, Hình 11.3), phương pháp chưng cất phân đoạn (có cột cất phân đoạn) dùng để tách hai hay nhiều chất lỏng có nhiệt độ sôi khác nhau không nhiều và tan lẫn hoàn toàn."
+                },
+                {
+                    level: "Thông hiểu",
+                    q: "Trong phương pháp chưng cất lôi cuốn hơi nước để tách tinh dầu (Hình 11.4), ở bình hứng chất lỏng tách thành hai lớp. Phát biểu nào sau đây đúng?",
+                    keywords: ["chưng cất lôi cuốn hơi nước", "bình hứng", "hai lớp"],
+                    choices: [
+                        "Lớp tinh dầu có khối lượng riêng nhỏ hơn nổi ở phía trên lớp nước.",
+                        "Lớp tinh dầu tan hoàn toàn trong nước tạo dung dịch đồng nhất.",
+                        "Lớp nước có khối lượng riêng nhỏ hơn nổi ở phía trên lớp tinh dầu.",
+                        "Tinh dầu bị hóa rắn và lắng xuống đáy bình hứng."
+                    ],
+                    optionFocus: ["khối lượng riêng nhỏ hơn nổi ở phía trên", "tan hoàn toàn", "nước", "hóa rắn"],
+                    answer: "A",
+                    explain: "Quan sát Hình 11.4 (SGK tr.65), tinh dầu không tan trong nước và nhẹ hơn nước nên tách thành lớp tinh dầu nổi ở phía trên lớp nước."
+                },
+                {
+                    level: "Nhận biết",
+                    q: "Phương pháp chiết tách biệt và tinh chế hỗn hợp các chất dựa trên nguyên tắc nào sau đây?",
+                    keywords: ["Phương pháp chiết", "nguyên tắc"],
+                    choices: [
+                        "Sự khác nhau về nhiệt độ sôi của các chất lỏng.",
+                        "Sự hòa tan khác nhau của các chất trong hai môi trường không trộn lẫn vào nhau.",
+                        "Sự giảm nhanh độ tan của chất rắn khi hạ nhiệt độ.",
+                        "Sự hấp phụ khác nhau lên pha tĩnh dạng bột."
+                    ],
+                    optionFocus: ["nhiệt độ sôi", "hòa tan khác nhau", "hai môi trường không trộn lẫn", "độ tan", "hấp phụ"],
+                    answer: "B",
+                    explain: "Theo SGK tr.65, chiết là phương pháp tách biệt và tinh chế hỗn hợp các chất dựa vào sự hòa tan khác nhau của chúng trong hai môi trường không trộn lẫn vào nhau."
+                },
+                {
+                    level: "Thông hiểu",
+                    q: "Trong thí nghiệm tách β-carotene từ nước ép cà rốt bằng hexane (SGK tr.66), sau khi lắc đều 2 phút và để yên 5 phút, màu sắc của lớp hexane ở phía trên thay đổi như thế nào?",
+                    keywords: ["β-carotene", "nước ép cà rốt", "hexane", "màu sắc"],
+                    choices: [
+                        "Chuyển từ màu vàng cam sang không màu.",
+                        "Chuyển từ không màu sang màu vàng cam do hòa tan β-carotene.",
+                        "Chuyển từ không màu sang màu xanh lục đậm.",
+                        "Không thay đổi màu sắc vì β-carotene không tan trong hexane."
+                    ],
+                    optionFocus: ["sang không màu", "từ không màu sang màu vàng cam", "màu xanh lục", "Không thay đổi"],
+                    answer: "B",
+                    explain: "Ban đầu hexane là chất lỏng không màu. Khi lắc với nước ép cà rốt, β-carotene (màu vàng cam) hòa tan tốt vào hexane nên lớp hexane ở phía trên chuyển sang màu vàng cam."
+                },
+                {
+                    level: "Thông hiểu",
+                    q: "Dung môi hữu cơ được lựa chọn trong phương pháp chiết lỏng – lỏng để tách chất hữu cơ hòa tan trong nước KHÔNG cần thỏa mãn yêu cầu nào sau đây?",
+                    keywords: ["chiết lỏng – lỏng", "KHÔNG cần", "yêu cầu"],
+                    choices: [
+                        "Có khả năng hòa tan tốt chất cần chiết.",
+                        "Không trộn lẫn với nước (dung môi ban đầu).",
+                        "Có nhiệt độ sôi thấp để dễ chưng cất loại bỏ dung môi sau chiết.",
+                        "Hòa tan tốt vô hạn trong nước."
+                    ],
+                    optionFocus: ["hòa tan tốt chất cần chiết", "Không trộn lẫn", "nhiệt độ sôi thấp", "Hòa tan tốt vô hạn trong nước"],
+                    answer: "D",
+                    explain: "Dung môi chiết bắt buộc phải KHÔNG trộn lẫn với nước thì mới tách thành 2 lớp phân biệt trong phễu chiết. Nếu hòa tan vô hạn trong nước thì không thể chiết lỏng – lỏng."
+                },
+                {
+                    level: "Vận dụng",
+                    q: "Cách làm “giã lá cây chàm, cho vào nước, lọc lấy dung dịch màu để nhuộm sợi, vải” (Câu 3a SGK tr.69) thuộc bản chất của phương pháp tách biệt nào?",
+                    keywords: ["giã lá cây chàm", "cho vào nước", "lọc lấy dung dịch màu"],
+                    choices: [
+                        "Chưng cất thường.",
+                        "Chiết lỏng – lỏng.",
+                        "Chiết lỏng – rắn.",
+                        "Phương pháp kết tinh."
+                    ],
+                    optionFocus: ["Chưng cất thường", "Chiết lỏng – lỏng", "Chiết lỏng – rắn", "kết tinh"],
+                    answer: "C",
+                    explain: "Nước (dung môi lỏng) hòa tan chất màu hữu cơ từ mô lá cây chàm (chất rắn) rồi lọc lấy dịch màu, đây là phương pháp chiết lỏng – rắn."
+                },
+                {
+                    level: "Nhận biết",
+                    q: "Theo mục “Em có biết” (SGK tr.66), phương pháp ngâm nóng dược liệu trong rượu thường áp dụng cho loại dược liệu nào?",
+                    keywords: ["ngâm nóng", "dược liệu"],
+                    choices: [
+                        "Các dược liệu mềm, dễ bị phân hủy ở nhiệt độ cao.",
+                        "Các dược liệu có cấu tạo rắn chắc, khó chiết xuất và có khả năng chịu nhiệt.",
+                        "Chỉ áp dụng cho các chất lỏng không tan trong nước.",
+                        "Chỉ áp dụng cho lá cây tươi có hàm lượng tinh dầu dễ bay hơi."
+                    ],
+                    optionFocus: ["mềm, dễ bị phân hủy", "cấu tạo rắn chắc, khó chiết xuất", "chịu nhiệt", "chất lỏng", "lá cây tươi"],
+                    answer: "B",
+                    explain: "SGK tr.66 nêu rõ: Ngâm nóng thường áp dụng cho các dược liệu có cấu tạo rắn chắc, khó chiết xuất và có khả năng chịu nhiệt (đun cách thủy đến sôi rồi ngâm kín 7–10 ngày)."
+                },
+                {
+                    level: "Nhận biết",
+                    q: "Nguyên tắc của phương pháp kết tinh là dựa vào yếu tố nào sau đây?",
+                    keywords: ["Nguyên tắc", "kết tinh"],
+                    choices: [
+                        "Sự khác nhau về khối lượng riêng của các chất lỏng không trộn lẫn.",
+                        "Độ tan khác nhau và sự thay đổi độ tan của các chất rắn theo nhiệt độ.",
+                        "Sự khác nhau về nhiệt độ sôi của các chất ở áp suất khí quyển.",
+                        "Khả năng hấp phụ khác nhau lên bột silica gel."
+                    ],
+                    optionFocus: ["khối lượng riêng", "Độ tan khác nhau", "thay đổi độ tan", "nhiệt độ sôi", "hấp phụ"],
+                    answer: "B",
+                    explain: "Theo SGK tr.67, kết tinh là phương pháp tách biệt và tinh chế hỗn hợp các chất rắn dựa vào độ tan khác nhau và sự thay đổi độ tan của chúng theo nhiệt độ."
+                },
+                {
+                    level: "Thông hiểu",
+                    q: "Trong quy trình kết tinh (Hình 11.7), dung môi thích hợp để tinh chế chất rắn cần thỏa mãn điều kiện nào sau đây?",
+                    keywords: ["kết tinh", "dung môi thích hợp", "điều kiện"],
+                    choices: [
+                        "Hòa tan tốt chất cần tinh chế ở nhiệt độ cao và hòa tan kém ở nhiệt độ thấp.",
+                        "Hòa tan tốt chất cần tinh chế ở cả nhiệt độ cao và nhiệt độ thấp.",
+                        "Không hòa tan chất cần tinh chế ở bất kì nhiệt độ nào.",
+                        "Chỉ hòa tan chất cần tinh chế ở nhiệt độ thấp và không tan ở nhiệt độ cao."
+                    ],
+                    optionFocus: ["tốt", "nhiệt độ cao", "kém ở nhiệt độ thấp", "cả nhiệt độ cao và nhiệt độ thấp", "Không hòa tan", "chỉ hòa tan"],
+                    answer: "A",
+                    explain: "SGK tr.67: Dung môi cần hòa tan tốt chất cần tinh chế ở nhiệt độ cao (tạo dung dịch bão hòa nóng) và hòa tan kém ở nhiệt độ thấp (để chất kết tinh tách ra nhiều khi làm lạnh)."
+                },
+                {
+                    level: "Thông hiểu",
+                    q: "Trong quy trình tinh chế đường đỏ thành đường trắng (SGK tr.68), người ta thêm than hoạt tính vào dung dịch đường đỏ nóng nhằm mục đích gì?",
+                    keywords: ["tinh chế đường đỏ", "than hoạt tính", "mục đích"],
+                    choices: [
+                        "Làm tăng độ ngọt của đường trắng.",
+                        "Hấp phụ chất màu để khử màu dung dịch đường.",
+                        "Phản ứng hóa học trực tiếp với saccharose tạo kết tủa trắng.",
+                        "Hạ nhanh nhiệt độ của dung dịch đường nóng."
+                    ],
+                    optionFocus: ["tăng độ ngọt", "Hấp phụ chất màu", "khử màu", "Phản ứng hóa học", "Hạ nhanh nhiệt độ"],
+                    answer: "B",
+                    explain: "SGK tr.68: Hòa tan đường đỏ vào nước nóng, thêm than hoạt tính để khử màu (nhờ khả năng hấp phụ các tạp chất màu), sau đó khuấy và lọc để thu dung dịch trong suốt không màu."
+                },
+                {
+                    level: "Thông hiểu",
+                    q: "Trong bước lọc nóng (Hình 11.7b) của phương pháp kết tinh, thao tác này giúp loại bỏ thành phần nào?",
+                    keywords: ["lọc nóng", "loại bỏ"],
+                    choices: [
+                        "Các tạp chất không tan trong dung môi nóng.",
+                        "Các tạp chất tan tốt trong dung môi lạnh.",
+                        "Phần chất hữu cơ tinh khiết cần thu hồi.",
+                        "Dung môi hữu cơ dễ bay hơi."
+                    ],
+                    optionFocus: ["tạp chất không tan trong dung môi nóng", "tan tốt trong dung môi lạnh", "chất hữu cơ tinh khiết", "Dung môi"],
+                    answer: "A",
+                    explain: "Ở nhiệt độ cao, chất cần tinh chế tan hoàn toàn trong dung môi nên đi qua giấy lọc; các tạp chất không tan trong dung môi nóng bị giữ lại trên giấy lọc."
+                },
+                {
+                    level: "Nhận biết",
+                    q: "Trong phương pháp sắc kí cột (Hình 11.8), chất rắn dạng bột có diện tích bề mặt rất lớn nhồi trong cột thủy tinh (như silica gel, aluminium oxide) đóng vai trò là gì?",
+                    keywords: ["sắc kí cột", "silica gel", "aluminium oxide", "vai trò"],
+                    choices: [
+                        "Pha động.",
+                        "Pha tĩnh.",
+                        "Dung môi chiết.",
+                        "Chất làm lạnh."
+                    ],
+                    optionFocus: ["Pha động", "Pha tĩnh", "Dung môi chiết", "Chất làm lạnh"],
+                    answer: "B",
+                    explain: "SGK tr.68: Pha tĩnh là một chất rắn có diện tích bề mặt rất lớn, có khả năng hấp phụ khác nhau các chất trong hỗn hợp cần tách (ví dụ: silica gel, aluminium oxide,...)."
+                },
+                {
+                    level: "Nhận biết",
+                    q: "Phương pháp sắc kí cột thường được ứng dụng hiệu quả nhất trong trường hợp nào sau đây?",
+                    keywords: ["sắc kí cột", "ứng dụng"],
+                    choices: [
+                        "Tách lượng lớn nước và ethanol trong công nghiệp thực phẩm.",
+                        "Tinh chế hàng tấn đường mía thô thành đường trắng.",
+                        "Tách các chất hữu cơ có hàm lượng nhỏ và khó tách ra khỏi nhau.",
+                        "Nấu rượu gạo thủ công ở quy mô hộ gia đình."
+                    ],
+                    optionFocus: ["lượng lớn nước và ethanol", "hàng tấn đường mía", "hàm lượng nhỏ và khó tách", "Nấu rượu gạo"],
+                    answer: "C",
+                    explain: "Theo mục IV.3 (SGK tr.68), phương pháp sắc kí cột thường dùng để tách các chất hữu cơ có hàm lượng nhỏ và khó tách ra khỏi nhau."
+                },
+                {
+                    level: "Vận dụng",
+                    q: "Cách làm “đường cát, đường phèn từ nước mía” (Câu 3d SGK tr.69) ứng dụng chủ yếu phương pháp tách biệt và tinh chế nào?",
+                    keywords: ["đường cát, đường phèn", "nước mía"],
+                    choices: [
+                        "Phương pháp chưng cất phân đoạn.",
+                        "Phương pháp chiết lỏng – lỏng.",
+                        "Phương pháp kết tinh.",
+                        "Phương pháp sắc kí cột."
+                    ],
+                    optionFocus: ["chưng cất phân đoạn", "chiết lỏng – lỏng", "kết tinh", "sắc kí cột"],
+                    answer: "C",
+                    explain: "Cô đặc nước mía tạo dung dịch đường bão hòa ở nhiệt độ cao, sau đó để nguội cho đường tách ra dạng tinh thể (đường cát, đường phèn) — đây là ứng dụng điển hình của phương pháp kết tinh."
+                }
+            ],
+            2: [
+                {
+                    level: "Thông hiểu – Vận dụng",
+                    q: "Thí nghiệm chưng cất ethanol từ rượu nấu thủ công (SGK tr.63–64, Hình 11.2): Cho 60 mL rượu nấu thủ công (hỗn hợp chủ yếu gồm ethanol có nhiệt độ sôi 78,3 °C và nước có nhiệt độ sôi 100 °C) vào bình cầu có nhánh 250 mL, thêm vài viên đá bọt, lắp hệ thống chưng cất thường và đun nóng từ từ.",
+                    keywords: ["chưng cất ethanol", "78,3 °C", "100 °C", "đá bọt", "chưng cất thường"],
+                    statements: [
+                        {
+                            label: "a",
+                            text: "Trong quá trình chưng cất, tỉ lệ ethanol/nước trong phần chất lỏng ngưng tụ thu được ở bình hứng tăng dần theo thời gian.",
+                            answer: false,
+                            explain: "Sai. Ethanol sôi ở 78,3 °C (thấp hơn nước 100 °C) nên bay hơi mạnh ở giai đoạn đầu; càng về sau lượng ethanol trong bình cầu giảm dần nên tỉ lệ ethanol/nước thu được giảm dần."
+                        },
+                        {
+                            label: "b",
+                            text: "Nước làm lạnh đi vào ống sinh hàn ở đầu phía dưới (gần bình hứng) và đi ra ở đầu phía trên (gần bình cầu) để nâng cao hiệu quả ngưng tụ.",
+                            answer: true,
+                            explain: "Đúng. Dòng nước đi ngược chiều từ dưới lên giúp nước luôn ngập đầy vỏ ngoài ống sinh hàn, tiếp xúc tốt nhất với hơi nóng để ngưng tụ tối đa."
+                        },
+                        {
+                            label: "c",
+                            text: "Khi nhiệt độ trên nhiệt kế ổn định (khoảng 78–80 °C) rồi bắt đầu tăng mạnh trở lại thì tắt nguồn nhiệt để ngừng chưng cất.",
+                            answer: true,
+                            explain: "Đúng. Đúng hướng dẫn thực hành SGK tr.64; khi nhiệt độ tăng mạnh trở lại nghĩa là hơi nước bắt đầu bay sang nhiều, cần ngừng đun để tránh làm loãng sản phẩm."
+                        },
+                        {
+                            label: "d",
+                            text: "Độ cồn của sản phẩm thu được trong bình hứng cao hơn so với độ cồn của rượu nấu thủ công ban đầu.",
+                            answer: true,
+                            explain: "Đúng. Phần chất lỏng ngưng tụ thu được ở khoảng nhiệt độ sôi thấp giàu ethanol hơn so với rượu ban đầu nên độ cồn tăng lên."
+                        }
+                    ]
+                },
+                {
+                    level: "Thông hiểu – Vận dụng",
+                    q: "Thí nghiệm tách β-carotene từ nước ép cà rốt (SGK tr.66, Hình 11.5): Cho khoảng 20 mL nước ép cà rốt vào phễu chiết 60 mL, thêm khoảng 20 mL hexane (khối lượng riêng 0,655 g/mL, không tan trong nước), lắc đều khoảng 2 phút rồi để yên trên giá thí nghiệm khoảng 5 phút.",
+                    keywords: ["β-carotene", "nước ép cà rốt", "hexane", "0,655 g/mL", "phễu chiết"],
+                    statements: [
+                        {
+                            label: "a",
+                            text: "Thí nghiệm trên thuộc phương pháp chiết lỏng – lỏng, dựa vào sự hòa tan khác nhau của β-carotene trong nước và trong hexane.",
+                            answer: true,
+                            explain: "Đúng. Hai pha đều là chất lỏng không trộn lẫn vào nhau (nước và hexane); β-carotene tan tốt hơn rất nhiều trong hexane nên chuyển sang pha hexane."
+                        },
+                        {
+                            label: "b",
+                            text: "Sau khi để yên, chất lỏng trong phễu chiết tách thành hai lớp; lớp ở phía trên là dung dịch β-carotene hòa tan trong hexane có màu vàng cam.",
+                            answer: true,
+                            explain: "Đúng. Hexane có khối lượng riêng 0,655 g/mL < 1 g/mL (nhẹ hơn nước) nên nổi ở lớp trên và chuyển màu vàng cam khi hòa tan β-carotene."
+                        },
+                        {
+                            label: "c",
+                            text: "Khi mở khóa phễu chiết để tách hai lớp, lớp dung dịch hexane chứa β-carotene chảy xuống bình tam giác trước.",
+                            answer: false,
+                            explain: "Sai. Lớp nước nặng hơn nằm ở phía dưới nên sẽ chảy xuống bình tam giác trước; lớp hexane chứa β-carotene nằm ở trên được giữ lại trong phễu."
+                        },
+                        {
+                            label: "d",
+                            text: "Việc ngâm củ nhân sâm hoặc các vị thuốc Bắc vào rượu (Hình 11.6) cũng sử dụng cùng loại kỹ thuật chiết lỏng – lỏng như thí nghiệm trên.",
+                            answer: false,
+                            explain: "Sai. Ngâm rượu thuốc dùng dung môi lỏng (rượu) hòa tan hoạt chất từ thảo dược rắn nên thuộc phương pháp chiết lỏng – rắn."
+                        }
+                    ]
+                },
+                {
+                    level: "Thông hiểu – Vận dụng",
+                    q: "Phương pháp kết tinh và tinh chế đường mía (SGK tr.67–68, Hình 11.7): Để tinh chế chất rắn hữu cơ lẫn tạp chất (hoặc tinh chế đường đỏ thành đường trắng), người ta thực hiện quy trình hòa tan ở nhiệt độ cao, lọc nóng, làm lạnh và lọc thu tinh thể.",
+                    keywords: ["kết tinh", "đường đỏ", "đường trắng", "lọc nóng", "làm lạnh"],
+                    statements: [
+                        {
+                            label: "a",
+                            text: "Phương pháp kết tinh dựa vào độ tan khác nhau của các chất rắn và sự giảm nhanh độ tan của chất cần tinh chế khi giảm nhiệt độ.",
+                            answer: true,
+                            explain: "Đúng. Đây chính là nguyên tắc cốt lõi của phương pháp kết tinh được tóm tắt trong mục Em đã học (SGK tr.69)."
+                        },
+                        {
+                            label: "b",
+                            text: "Trong quá trình tinh chế đường đỏ thành đường trắng, than hoạt tính được thêm vào dung dịch nước đường nóng để khử màu và hấp phụ tạp chất màu.",
+                            answer: true,
+                            explain: "Đúng. Than hoạt tính có cấu trúc xốp hấp phụ tốt các chất màu trong đường đỏ, sau khi lọc sẽ thu được dung dịch trong suốt không màu."
+                        },
+                        {
+                            label: "c",
+                            text: "Bước làm lạnh dung dịch sau khi lọc nóng (Hình 11.7c) nhằm mục đích hòa tan hoàn toàn lượng tạp chất còn sót lại thành chất khí bay ra ngoài.",
+                            answer: false,
+                            explain: "Sai. Bước làm lạnh nhằm làm giảm mạnh độ tan của chất cần tinh chế khiến dung dịch trở nên quá bão hòa và tách tinh thể chất rắn ra."
+                        },
+                        {
+                            label: "d",
+                            text: "Thực hiện kết tinh lại nhiều lần trong dung môi thích hợp sẽ thu được tinh thể chất hữu cơ có độ tinh khiết cao hơn.",
+                            answer: true,
+                            explain: "Đúng. Theo SGK tr.67, thực hiện kết tinh lại nhiều lần trong cùng một dung môi hoặc các dung môi khác nhau giúp loại bỏ tạp chất triệt để hơn."
+                        }
+                    ]
+                },
+                {
+                    level: "Thông hiểu – Vận dụng",
+                    q: "Kỹ thuật sắc kí cột (SGK tr.68, Hình 11.8): Trong phòng thí nghiệm, hỗn hợp 3 chất hữu cơ X, Y, Z có hàm lượng nhỏ được tách bằng phương pháp sắc kí cột sử dụng pha tĩnh là bột silica gel nhồi trong cột thủy tinh và pha động là dung môi hữu cơ chảy liên tục qua cột. Kết quả cho thấy thứ tự các chất đi ra khỏi cột lần lượt là X, rồi đến Y, sau cùng là Z.",
+                    keywords: ["sắc kí cột", "silica gel", "thứ tự", "X, rồi đến Y, sau cùng là Z"],
+                    statements: [
+                        {
+                            label: "a",
+                            text: "Nguyên tắc của phương pháp sắc kí cột dựa vào sự phân bố khác nhau của các chất giữa pha động và pha tĩnh.",
+                            answer: true,
+                            explain: "Đúng. Theo SGK tr.68, sắc kí cột tách biệt hỗn hợp dựa vào sự phân bố khác nhau của các chất giữa pha động và pha tĩnh."
+                        },
+                        {
+                            label: "b",
+                            text: "Trong thí nghiệm trên, chất Z bị pha tĩnh silica gel hấp phụ mạnh nhất nên di chuyển chậm nhất qua cột.",
+                            answer: true,
+                            explain: "Đúng. Chất bị pha tĩnh hấp phụ càng mạnh thì bị giữ lại càng lâu và di chuyển chậm nhất nên ra khỏi cột sau cùng (Z)."
+                        },
+                        {
+                            label: "c",
+                            text: "Chất X di chuyển nhanh nhất chứng tỏ chất X có nhiệt độ sôi thấp nhất trong ba chất X, Y, Z.",
+                            answer: false,
+                            explain: "Sai. Tốc độ di chuyển trong sắc kí cột phụ thuộc vào mức độ hấp phụ lên pha tĩnh và độ hòa tan trong pha động, không dựa vào nhiệt độ sôi."
+                        },
+                        {
+                            label: "d",
+                            text: "Sau khi thu được từng phân đoạn dung dịch chứa riêng rẽ X, Y, Z ra khỏi cột, người ta loại bỏ dung môi để thu được từng chất cần tách.",
+                            answer: true,
+                            explain: "Đúng. Đúng quy trình tiến hành sắc kí cột trình bày ở mục IV.2 (SGK tr.68)."
+                        }
+                    ]
+                }
+            ],
+            3: [
+                {
+                    level: "Vận dụng",
+                    q: "Trong thí nghiệm chưng cất ethanol – nước (SGK tr.64), để đảm bảo an toàn, thể tích chất lỏng cho vào bình cầu có nhánh không vượt quá 2/3 thể tích bình. Nếu sử dụng bình cầu có nhánh dung tích 300 mL thì thể tích chất lỏng tối đa (tính theo mL) có thể cho vào bình là bao nhiêu?",
+                    keywords: ["không vượt quá 2/3", "dung tích 300 mL", "tối đa"],
+                    answer: "200",
+                    unit: "mL",
+                    tableTitle: "THÔNG SỐ AN TOÀN DỤNG CỤ CHƯNG CẤT (HÌNH 11.2)",
+                    tableHTML: `
+                        <table class="data-table">
+                            <thead>
+                                <tr><th>Thông số thực hành</th><th>Giá trị quy định</th></tr>
+                            </thead>
+                            <tbody>
+                                <tr><td>Dung tích bình cầu có nhánh sử dụng</td><td><strong>300 mL</strong></td></tr>
+                                <tr><td>Mức chất lỏng an toàn tối đa</td><td><strong>2/3 thể tích bình</strong></td></tr>
+                                <tr><td>Phụ liệu chống quá sôi</td><td>Vài viên đá bọt</td></tr>
+                            </tbody>
+                        </table>
+                    `,
+                    explain: "Thể tích chất lỏng tối đa có thể cho vào bình cầu có nhánh 300 mL là:<br>V<sub>tối đa</sub> = (2/3) × 300 = <strong>200 mL</strong>."
+                },
+                {
+                    level: "Thông hiểu",
+                    q: "Dựa vào bảng nhiệt độ sôi (ở 1 atm) bên trái, hãy tính hiệu nhiệt độ sôi (theo °C) giữa nước và ethanol? (Làm tròn kết quả đến hàng phần mười).",
+                    keywords: ["hiệu nhiệt độ sôi", "nước và ethanol", "hàng phần mười"],
+                    answer: "21,7",
+                    unit: "°C",
+                    tableTitle: "BẢNG NHIỆT ĐỘ SÔI CỦA MỘT SỐ CHẤT LỎNG (Ở 1 ATM)",
+                    tableHTML: `
+                        <table class="data-table">
+                            <thead>
+                                <tr><th>Chất lỏng</th><th>Công thức</th><th>Nhiệt độ sôi (°C)</th></tr>
+                            </thead>
+                            <tbody>
+                                <tr style="background:#fff3e0;"><td><strong>Nước</strong></td><td>H<sub>2</sub>O</td><td><strong>100,0</strong></td></tr>
+                                <tr style="background:#fff3e0;"><td><strong>Ethanol</strong></td><td>C<sub>2</sub>H<sub>5</sub>OH</td><td><strong>78,3</strong></td></tr>
+                                <tr><td>Acetone</td><td>CH<sub>3</sub>COCH<sub>3</sub></td><td>56,1</td></tr>
+                                <tr><td>Diethyl ether</td><td>(C<sub>2</sub>H<sub>5</sub>)<sub>2</sub>O</td><td>34,6</td></tr>
+                            </tbody>
+                        </table>
+                    `,
+                    explain: "Hiệu nhiệt độ sôi giữa nước và ethanol ở 1 atm:<br>&Delta;t = 100,0 &minus; 78,3 = <strong>21,7 °C</strong>."
+                },
+                {
+                    level: "Vận dụng",
+                    q: "Dựa vào bảng độ tan của benzoic acid trong nước ở cột trái, khi làm lạnh dung dịch bão hòa chứa đúng 200 g nước từ 95 °C xuống 20 °C thì khối lượng benzoic acid tối đa (tính theo gam) tách ra dưới dạng tinh thể là bao nhiêu?",
+                    keywords: ["benzoic acid", "200 g nước", "95 °C xuống 20 °C", "khối lượng"],
+                    answer: "13",
+                    unit: "g",
+                    tableTitle: "BẢNG ĐỘ TAN CỦA BENZOIC ACID TRONG NƯỚC",
+                    tableHTML: `
+                        <table class="data-table">
+                            <thead>
+                                <tr><th>Nhiệt độ (°C)</th><th>Độ tan (g / 100 g nước)</th></tr>
+                            </thead>
+                            <tbody>
+                                <tr style="background:#fff3e0;"><td><strong>95 °C</strong></td><td><strong>6,8</strong></td></tr>
+                                <tr style="background:#fff3e0;"><td><strong>20 °C</strong></td><td><strong>0,3</strong></td></tr>
+                            </tbody>
+                        </table>
+                    `,
+                    explain: "Trong 200 g nước:<br>• Ở 95 °C, lượng benzoic acid tan tối đa: 6,8 × (200 / 100) = 13,6 g.<br>• Ở 20 °C, lượng benzoic acid còn tan tối đa: 0,3 × (200 / 100) = 0,6 g.<br>• Khối lượng tinh thể benzoic acid tối đa kết tinh tách ra: 13,6 &minus; 0,6 = <strong>13 g</strong>."
+                },
+                {
+                    level: "Thông hiểu",
+                    q: "Dựa vào danh sách 6 quá trình thực tế ở bảng bên trái (SGK tr.66–69), có bao nhiêu quá trình thuộc phương pháp CHIẾT (gồm cả chiết lỏng – lỏng và chiết lỏng – rắn)?",
+                    keywords: ["bao nhiêu quá trình", "CHIẾT", "chiết lỏng – lỏng", "chiết lỏng – rắn"],
+                    answer: "3",
+                    unit: "quá trình",
+                    tableTitle: "DANH SÁCH CÁC QUÁ TRÌNH TÁCH BIỆT TRONG ĐỜI SỐNG",
+                    tableHTML: `
+                        <table class="data-table" style="text-align: left;">
+                            <thead>
+                                <tr><th style="width:45px; text-align:center;">TT</th><th>Quá trình thực tế</th></tr>
+                            </thead>
+                            <tbody>
+                                <tr><td style="text-align:center;">(1)</td><td>Giã lá cây chàm, cho vào nước, lọc lấy dung dịch màu để nhuộm sợi, vải.</td></tr>
+                                <tr><td style="text-align:center;">(2)</td><td>Nấu rượu uống từ gạo lên men.</td></tr>
+                                <tr><td style="text-align:center;">(3)</td><td>Ngâm rượu thuốc từ thảo dược.</td></tr>
+                                <tr><td style="text-align:center;">(4)</td><td>Làm đường cát, đường phèn từ nước mía.</td></tr>
+                                <tr><td style="text-align:center;">(5)</td><td>Tách β-carotene từ nước ép cà rốt bằng hexane.</td></tr>
+                                <tr><td style="text-align:center;">(6)</td><td>Chưng cất tinh dầu sả bằng lôi cuốn hơi nước.</td></tr>
+                            </tbody>
+                        </table>
+                    `,
+                    explain: "Phân loại từng quá trình:<br>• (1) Chiết lỏng – rắn &rarr; <strong>Chọn</strong>.<br>• (2) Chưng cất.<br>• (3) Chiết lỏng – rắn &rarr; <strong>Chọn</strong>.<br>• (4) Kết tinh.<br>• (5) Chiết lỏng – lỏng &rarr; <strong>Chọn</strong>.<br>• (6) Chưng cất lôi cuốn hơi nước.<br>&rarr; Có tất cả <strong>3</strong> quá trình thuộc phương pháp chiết: (1), (3), (5)."
+                },
+                {
+                    level: "Vận dụng",
+                    q: "Khi tiến hành kết tinh lại 25,0 g một mẫu đường thô (chứa 80% đường saccharose tinh khiết về khối lượng, còn lại là tạp chất màu và tạp chất không tan) bằng nước nóng và than hoạt tính, thu được 17,0 g tinh thể đường trắng tinh khiết. Hiệu suất của quá trình kết tinh tính theo lượng đường tinh khiết có trong mẫu thô là bao nhiêu phần trăm?",
+                    keywords: ["25,0 g", "80%", "17,0 g", "Hiệu suất"],
+                    answer: "85",
+                    unit: "%",
+                    tableTitle: "SỐ LIỆU TINH CHẾ ĐƯỜNG ĐỎ THÀNH ĐƯỜNG TRẮNG",
+                    tableHTML: `
+                        <table class="data-table">
+                            <thead>
+                                <tr><th>Đại lượng</th><th>Giá trị</th></tr>
+                            </thead>
+                            <tbody>
+                                <tr><td>Khối lượng mẫu đường thô ban đầu</td><td><strong>25,0 g</strong></td></tr>
+                                <tr><td>Hàm lượng saccharose tinh khiết trong mẫu</td><td><strong>80%</strong></td></tr>
+                                <tr><td>Khối lượng tinh thể đường trắng thu được</td><td><strong>17,0 g</strong></td></tr>
+                            </tbody>
+                        </table>
+                    `,
+                    explain: "Bước 1: Tính khối lượng saccharose tinh khiết có trong 25,0 g đường thô:<br>m<sub>lý thuyết</sub> = 25,0 × 80% = 20,0 g.<br>Bước 2: Hiệu suất quá trình kết tinh:<br>H = (17,0 / 20,0) × 100% = <strong>85%</strong>."
+                },
+                {
+                    level: "Vận dụng",
+                    q: "Tiến hành chưng cất lôi cuốn hơi nước vỏ quả bưởi thu được 20,0 mL lớp tinh dầu nổi ở phía trên lớp nước (Hình 11.4). Biết khối lượng riêng của tinh dầu bưởi ở điều kiện thí nghiệm là 0,85 g/mL. Khối lượng tinh dầu bưởi thu được là bao nhiêu gam?",
+                    keywords: ["20,0 mL", "0,85 g/mL", "Khối lượng tinh dầu"],
+                    answer: "17",
+                    unit: "g",
+                    tableTitle: "SỐ LIỆU CHƯNG CẤT LÔI CUỐN HƠI NƯỚC VỎ BƯỞI",
+                    tableHTML: `
+                        <table class="data-table">
+                            <thead>
+                                <tr><th>Thông số đo được</th><th>Giá trị</th></tr>
+                            </thead>
+                            <tbody>
+                                <tr><td>Thể tích lớp tinh dầu bưởi thu được (V)</td><td><strong>20,0 mL</strong></td></tr>
+                                <tr><td>Khối lượng riêng của tinh dầu bưởi (D)</td><td><strong>0,85 g/mL</strong></td></tr>
+                            </tbody>
+                        </table>
+                    `,
+                    explain: "Áp dụng công thức m = V × D:<br>m<sub>tinh dầu</sub> = 20,0 × 0,85 = <strong>17 g</strong>."
+                }
+            ]
+        };
+
+        /* =========================================================
+           2. QUẢN LÝ TRẠNG THÁI & LƯU TRỮ LOCALSTORAGE
+           ========================================================= */
+        let currentPane = 'pane-home';
+        let currentPart = 1;
+        let currentQuestionIdx = 0;
+        let currentSlideIdx = 0;
+        const totalSlides = 5;
+        let isTeacherMode = false;
+
+        // Trạng thái bài làm lưu bằng localStorage key H11_B11_TN2025
+        let savedState = JSON.parse(localStorage.getItem(STORAGE_KEY) || '{}');
+        // Lưu tạm lựa chọn Phần II trước khi bấm "Chấm điểm"
+        let tempTFSelection = {};
+
+        function persistState() {
+            try {
+                localStorage.setItem(STORAGE_KEY, JSON.stringify(savedState));
+            } catch (e) {}
+            updateHeaderScore();
+        }
+
+        /* =========================================================
+           3. HỆ THỐNG ÂM THANH TỔNG HỢP WEB AUDIO API (100% OFFLINE)
+           ========================================================= */
+        let audioCtx = null;
+        function playSound(type) {
+            try {
+                if (!audioCtx) {
+                    const AudioContextClass = window.AudioContext || window.webkitAudioContext;
+                    if (!AudioContextClass) return;
+                    audioCtx = new AudioContextClass();
+                }
+                if (audioCtx.state === 'suspended') audioCtx.resume();
+                const now = audioCtx.currentTime;
+
+                if (type === 'click') {
+                    const osc = audioCtx.createOscillator();
+                    const gain = audioCtx.createGain();
+                    osc.connect(gain);
+                    gain.connect(audioCtx.destination);
+                    osc.frequency.setValueAtTime(620, now);
+                    gain.gain.setValueAtTime(0.05, now);
+                    gain.gain.exponentialRampToValueAtTime(0.005, now + 0.05);
+                    osc.start(now);
+                    osc.stop(now + 0.05);
+                } else if (type === 'correct') {
+                    [261.63, 329.63, 392.00, 523.25].forEach((freq, i) => {
+                        const osc = audioCtx.createOscillator();
+                        const gain = audioCtx.createGain();
+                        osc.connect(gain);
+                        gain.connect(audioCtx.destination);
+                        osc.type = 'triangle';
+                        osc.frequency.setValueAtTime(freq, now + i * 0.075);
+                        gain.gain.setValueAtTime(0.08, now + i * 0.075);
+                        gain.gain.exponentialRampToValueAtTime(0.001, now + i * 0.075 + 0.24);
+                        osc.start(now + i * 0.075);
+                        osc.stop(now + i * 0.075 + 0.24);
+                    });
+                } else if (type === 'wrong') {
+                    const osc = audioCtx.createOscillator();
+                    const gain = audioCtx.createGain();
+                    osc.connect(gain);
+                    gain.connect(audioCtx.destination);
+                    osc.type = 'sawtooth';
+                    osc.frequency.setValueAtTime(165, now);
+                    gain.gain.setValueAtTime(0.07, now);
+                    gain.gain.exponentialRampToValueAtTime(0.005, now + 0.22);
+                    osc.start(now);
+                    osc.stop(now + 0.22);
+                } else if (type === 'tick') {
+                    const osc = audioCtx.createOscillator();
+                    const gain = audioCtx.createGain();
+                    osc.connect(gain);
+                    gain.connect(audioCtx.destination);
+                    osc.type = 'sine';
+                    osc.frequency.setValueAtTime(840, now);
+                    gain.gain.setValueAtTime(0.06, now);
+                    gain.gain.exponentialRampToValueAtTime(0.005, now + 0.035);
+                    osc.start(now);
+                    osc.stop(now + 0.035);
+                }
+            } catch (e) {}
+        }
+
+        /* =========================================================
+           4. ĐIỀU HƯỚNG GIAO DIỆN & MODAL
+           ========================================================= */
+        function toggleMobileSidebar(open) {
+            document.getElementById('sidebar').classList.toggle('open', open);
+            document.getElementById('sidebarOverlay').classList.toggle('open', open);
+        }
+
+        function switchPane(paneId, btnEl) {
+            playSound('click');
+            toggleMobileSidebar(false);
+
+            if ('speechSynthesis' in window && window.speechSynthesis.speaking) {
+                window.speechSynthesis.cancel();
+                resetSpeakButtonUI();
+            }
+
+            document.querySelectorAll('.view-pane').forEach(p => p.classList.remove('active'));
+            document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
+
+            document.getElementById(paneId).classList.add('active');
+            if (btnEl) btnEl.classList.add('active');
+            currentPane = paneId;
+
+            const titleEl = document.getElementById('headerPartTitle');
+            const progressEl = document.getElementById('headerProgress');
+            const submenu = document.getElementById('practiceSubmenu');
+
+            if (paneId === 'pane-practice') {
+                submenu.style.display = 'flex';
+                progressEl.style.display = 'block';
+                generateQuestionPaginationDots();
+                renderPracticeContent();
+            } else {
+                submenu.style.display = 'none';
+                progressEl.style.display = 'none';
+                if (paneId === 'pane-home') titleEl.textContent = 'Trợ Lý Lớp Học - Trang Chủ';
+                if (paneId === 'pane-lesson') {
+                    titleEl.textContent = 'Không Gian Bài Học - Bài giảng điện tử';
+                    jumpToSlide(currentSlideIdx);
+                }
+                if (paneId === 'pane-glossary') titleEl.textContent = 'Hệ Thống Từ Khóa Cốt Lõi (8 Thẻ Lật 3D)';
+                if (paneId === 'pane-wheel') {
+                    titleEl.textContent = '🎡 Vòng Quay May Mắn Gọi Tên';
+                    drawWheel();
+                }
+                if (paneId === 'pane-dashboard') {
+                    titleEl.textContent = '🏆 Báo Cáo Kết Quả (Chuẩn TN THPT 2025)';
+                    renderDashboard();
+                }
+            }
+        }
+
+        function showInfoModal(emoji, title, htmlText) {
+            document.getElementById('infoModalEmoji').textContent = emoji;
+            document.getElementById('infoModalTitle').textContent = title;
+            document.getElementById('infoModalText').innerHTML = htmlText;
+            document.getElementById('infoModal').classList.add('show');
+        }
+
+        function closeModal(modalId) {
+            playSound('click');
+            document.getElementById(modalId).classList.remove('show');
+        }
+
+        function toggleReveal(id) {
+            playSound('click');
+            const el = document.getElementById(id);
+            if (el) el.classList.toggle('open');
+        }
+
+        /* =========================================================
+           5. SLIDESHOW, THUYẾT MINH GIỌNG ĐỌC & ĐỒNG HỒ ĐẾM NGƯỢC
+           ========================================================= */
+        function navigateSlide(dir) {
+            playSound('click');
+            let target = currentSlideIdx + dir;
+            if (target < 0) target = 0;
+            if (target >= totalSlides) target = totalSlides - 1;
+            jumpToSlide(target);
+        }
+
+        function jumpToSlide(idx) {
+            currentSlideIdx = parseInt(idx, 10);
+            document.querySelectorAll('.slide-content').forEach((slide, i) => {
+                slide.classList.toggle('active-slide', i === currentSlideIdx);
+            });
+            document.getElementById('slideProgressBar').value = currentSlideIdx;
+            document.getElementById('slideIndexLabel').textContent = `Slide ${currentSlideIdx + 1} / ${totalSlides}`;
+            if ('speechSynthesis' in window && window.speechSynthesis.speaking) {
+                window.speechSynthesis.cancel();
+                resetSpeakButtonUI();
+            }
+        }
+
+        function normalizeChemicalSpeech(text) {
+            return text
+                .replace(/β-carotene/gi, 'bê ta ca rô ten')
+                .replace(/ethanol/gi, 'ê ta nôn')
+                .replace(/hexane/gi, 'héc xan')
+                .replace(/silica gel/gi, 'si li ca geo')
+                .replace(/aluminium oxide/gi, 'a lu mi ni um óc xai')
+                .replace(/ethyl acetate/gi, 'ê tin a xê tát')
+                .replace(/acetone/gi, 'a xê tôn')
+                .replace(/diethyl ether/gi, 'đi ê tin ê te')
+                .replace(/ether/gi, 'ê te')
+                .replace(/benzoic acid/gi, 'ben zô ích a xít')
+                .replace(/saccharose/gi, 'sắc ca rô zơ')
+                .replace(/mL/g, 'mi li lít')
+                .replace(/°C/g, 'độ xê')
+                .replace(/→/g, ' tạo thành ');
+        }
+
+        function resetSpeakButtonUI() {
+            const btn = document.getElementById('btnSpeakSlide');
+            if (btn) {
+                btn.textContent = '🔊 Thuyết minh Slide';
+                btn.style.backgroundColor = 'var(--accent-purple)';
+            }
+        }
+
+        function speakCurrentSlide() {
+            if (!('speechSynthesis' in window)) {
+                showInfoModal('🔇', 'Không hỗ trợ giọng nói', 'Trình duyệt hiện tại không hỗ trợ Web Speech API để thuyết minh.');
+                return;
+            }
+            if (window.speechSynthesis.speaking) {
+                window.speechSynthesis.cancel();
+                resetSpeakButtonUI();
+                return;
+            }
+            const activeSlide = document.querySelector('.slide-content.active-slide');
+            if (!activeSlide) return;
+            const text = normalizeChemicalSpeech(activeSlide.innerText);
+            const utter = new SpeechSynthesisUtterance(text);
+            utter.lang = 'vi-VN';
+            utter.rate = 1.0;
+            utter.onend = resetSpeakButtonUI;
+            const btn = document.getElementById('btnSpeakSlide');
+            btn.textContent = '⏸ Dừng thuyết minh';
+            btn.style.backgroundColor = 'var(--accent-red)';
+            window.speechSynthesis.speak(utter);
+        }
+
+        function readQuestionAudio() {
+            if (!('speechSynthesis' in window)) return;
+            window.speechSynthesis.cancel();
+            const qObj = quizData[currentPart][currentQuestionIdx];
+            let raw = qObj.q;
+            if (currentPart === 2 && qObj.statements) {
+                raw += ' ' + qObj.statements.map(s => `Ý ${s.label}: ${s.text}`).join(' ');
+            }
+            const utter = new SpeechSynthesisUtterance(normalizeChemicalSpeech(raw));
+            utter.lang = 'vi-VN';
+            window.speechSynthesis.speak(utter);
+        }
+
+        // ĐỒNG HỒ ĐẾM NGƯỢC
+        let timerInterval = null;
+        let timerSeconds = 120;
+        let timerRunning = false;
+
+        function updateTimerDisplay() {
+            const m = Math.floor(timerSeconds / 60);
+            const s = timerSeconds % 60;
+            const clock = document.getElementById('slideTimerClock');
+            clock.textContent = `${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}`;
+            clock.classList.toggle('warning', timerRunning && timerSeconds <= 10 && timerSeconds > 0);
+        }
+
+        function toggleTimer() {
+            playSound('click');
+            const btn = document.getElementById('btnStartTimer');
+            if (timerRunning) {
+                clearInterval(timerInterval);
+                timerRunning = false;
+                btn.textContent = '▶ Bắt đầu';
+                updateTimerDisplay();
+            } else {
+                if (timerSeconds <= 0) timerSeconds = 120;
+                timerRunning = true;
+                btn.textContent = '⏸ Tạm dừng';
+                updateTimerDisplay();
+                timerInterval = setInterval(() => {
+                    if (timerSeconds > 0) {
+                        timerSeconds--;
+                        updateTimerDisplay();
+                        if (timerSeconds <= 10 && timerSeconds > 0) playSound('tick');
+                    } else {
+                        clearInterval(timerInterval);
+                        timerRunning = false;
+                        btn.textContent = '▶ Bắt đầu';
+                        updateTimerDisplay();
+                        playSound('wrong');
+                        showInfoModal('⏰', 'HẾT THỜI GIAN THẢO LUẬN!', 'Thời gian hoạt động nhóm đã kết thúc. Mời các nhóm trình bày kết quả!');
+                    }
+                }, 1000);
+            }
+        }
+
+        function resetTimer() {
+            playSound('click');
+            clearInterval(timerInterval);
+            timerRunning = false;
+            timerSeconds = 120;
+            document.getElementById('btnStartTimer').textContent = '▶ Bắt đầu';
+            updateTimerDisplay();
+        }
+
+        function setTimerPreset(mins) {
+            playSound('click');
+            clearInterval(timerInterval);
+            timerRunning = false;
+            timerSeconds = mins * 60;
+            document.getElementById('btnStartTimer').textContent = '▶ Bắt đầu';
+            updateTimerDisplay();
+        }
+
+        /* =========================================================
+           6. PHÒNG THÍ NGHIỆM ẢO SVG ĐỘNG (SLIDE 5)
+           ========================================================= */
+        let isFunnelDrained = false;
+
+        function runSim(simId) {
+            playSound('click');
+            document.querySelectorAll('.btn-sim-option').forEach((btn, idx) => {
+                btn.classList.toggle('active', idx === simId - 1);
+            });
+
+            const visual = document.getElementById('simVisual');
+            const desc = document.getElementById('simDesc');
+
+            if (simId === 1) {
+                // Hình 11.2: Chưng cất thường ethanol - nước
+                visual.innerHTML = `
+                    <svg viewBox="0 0 640 265" style="width:100%; max-width:640px; height:auto;">
+                        <!-- Bếp đun -->
+                        <rect x="65" y="215" width="90" height="24" rx="5" fill="#636e72" stroke="#dfe6e9" stroke-width="2"/>
+                        <rect x="78" y="208" width="64" height="7" rx="3" fill="#ff7675" style="animation: blinker 1.2s infinite;"/>
+                        <text x="110" y="254" fill="#dfe6e9" font-size="12" text-anchor="middle">Nguồn nhiệt (đun từ từ)</text>
+
+                        <!-- Bình cầu có nhánh (< 2/3 thể tích) -->
+                        <circle cx="110" cy="162" r="44" fill="rgba(255,255,255,0.1)" stroke="#ffffff" stroke-width="2.5"/>
+                        <rect x="100" y="75" width="20" height="46" fill="rgba(255,255,255,0.08)" stroke="#ffffff" stroke-width="2.5"/>
+                        <!-- Chất lỏng ethanol - nước (<2/3 bình) -->
+                        <path d="M 69,172 A 44,44 0 0,0 151,172 Z" fill="rgba(116,185,255,0.55)"/>
+                        <!-- Vài viên đá bọt ở đáy -->
+                        <circle cx="96" cy="197" r="3.5" fill="#fdcb6e"/>
+                        <circle cx="110" cy="200" r="4" fill="#fdcb6e"/>
+                        <circle cx="123" cy="197" r="3.5" fill="#fdcb6e"/>
+                        <!-- Bọt sôi -->
+                        <circle cx="100" cy="188" r="2.5" fill="#ffffff" style="animation: bubbleUp 1.3s infinite;"/>
+                        <circle cx="115" cy="192" r="2" fill="#ffffff" style="animation: bubbleUp 1.6s infinite;"/>
+                        <circle cx="122" cy="186" r="2.5" fill="#ffffff" style="animation: bubbleUp 1.1s infinite;"/>
+
+                        <!-- Nhiệt kế đặt ngang nhánh -->
+                        <line x1="110" y1="22" x2="110" y2="105" stroke="#ff7675" stroke-width="3.5"/>
+                        <circle cx="110" cy="106" r="4.5" fill="#d63031"/>
+                        <rect x="122" y="24" width="110" height="22" rx="6" fill="rgba(255,118,117,0.22)" stroke="#ff7675"/>
+                        <text x="177" y="39" fill="#ffeaa7" font-size="11.5" font-weight="bold" text-anchor="middle">Nhiệt kế: 78,3 °C</text>
+
+                        <!-- Ống nhánh & đường hơi -->
+                        <path d="M 120,96 L 175,112 L 395,168 L 455,184 L 455,200" fill="none" stroke="#ffeaa7" stroke-width="3" stroke-dasharray="7 5" style="animation: vaporFlow 1s linear infinite;"/>
+
+                        <!-- Ống sinh hàn -->
+                        <g transform="rotate(14.5 285 140)">
+                            <rect x="180" y="122" width="215" height="36" rx="8" fill="rgba(9,132,227,0.28)" stroke="#74b9ff" stroke-width="2"/>
+                            <line x1="175" y1="140" x2="400" y2="140" stroke="#ffffff" stroke-width="4" opacity="0.6"/>
+                        </g>
+                        <!-- Nước lạnh vào từ đầu dưới (gần bình hứng) -->
+                        <line x1="365" y1="185" x2="365" y2="215" stroke="#00cec9" stroke-width="3"/>
+                        <polygon points="365,178 359,189 371,189" fill="#00cec9"/>
+                        <text x="365" y="232" fill="#81ecec" font-size="12" font-weight="bold" text-anchor="middle">Nước lạnh vào (dưới)</text>
+
+                        <!-- Nước ra từ đầu trên (gần bình cầu) -->
+                        <line x1="215" y1="104" x2="215" y2="75" stroke="#74b9ff" stroke-width="3"/>
+                        <polygon points="215,67 209,78 221,78" fill="#74b9ff"/>
+                        <text x="215" y="62" fill="#74b9ff" font-size="12" font-weight="bold" text-anchor="middle">Nước ra (trên)</text>
+                        <text x="310" y="102" fill="#ffffff" font-size="13" font-weight="bold">Ống sinh hàn</text>
+
+                        <!-- Bình tam giác hứng ethanol -->
+                        <polygon points="444,195 466,195 492,245 418,245" fill="rgba(255,255,255,0.08)" stroke="#ffffff" stroke-width="2.5"/>
+                        <polygon points="430,224 480,224 490,244 420,244" fill="rgba(85,239,196,0.55)"/>
+                        <circle cx="455" cy="196" r="3.2" fill="#55efc4" style="animation: dropFall 1.1s infinite;"/>
+                        <text x="535" y="235" fill="#55efc4" font-size="12.5" font-weight="bold">Bình hứng</text>
+                        <text x="535" y="250" fill="#dfe6e9" font-size="11.5">(Ethanol giàu hơn)</text>
+
+                        <!-- Chú thích đá bọt -->
+                        <text x="190" y="198" fill="#fdcb6e" font-size="12" font-weight="bold">← Đá bọt</text>
+                    </svg>
+                `;
+                desc.innerHTML = '<strong>⚗️ Thí nghiệm Chưng cất thường (Hình 11.2, SGK tr.64):</strong> Hỗn hợp rượu (không quá 2/3 bình cầu 250 mL) có thêm <strong>đá bọt</strong> giúp sôi đều. Nhiệt kế đặt ngang nhánh bình cầu theo dõi nhiệt độ hơi (~78,3 °C). Nước làm lạnh đi ngược chiều (vào từ đầu dưới gần bình hứng, ra đầu trên gần bình cầu) giúp ngưng tụ tối đa hơi ethanol thành giọt rơi vào bình hứng.';
+            } else if (simId === 2) {
+                isFunnelDrained = false;
+                renderExtractionSim();
+            } else if (simId === 3) {
+                // Hình 11.7a-d: Quy trình Kết tinh 4 bước
+                visual.innerHTML = `
+                    <svg viewBox="0 0 680 245" style="width:100%; max-width:680px; height:auto;">
+                        <!-- Bước a -->
+                        <g transform="translate(15, 10)">
+                            <rect x="0" y="0" width="148" height="220" rx="12" fill="rgba(255,255,255,0.06)" stroke="rgba(255,255,255,0.2)"/>
+                            <text x="74" y="24" fill="#ffeaa7" font-size="13" font-weight="bold" text-anchor="middle">a) Hòa tan nóng</text>
+                            <rect x="68" y="38" width="12" height="58" rx="4" fill="rgba(116,185,255,0.3)" stroke="#74b9ff" stroke-width="1.5"/>
+                            <circle cx="74" cy="128" r="28" fill="rgba(255,255,255,0.1)" stroke="#ffffff" stroke-width="2"/>
+                            <path d="M 48,134 A 28,28 0 0,0 100,134 Z" fill="rgba(253,203,110,0.6)"/>
+                            <rect x="44" y="160" width="60" height="10" rx="3" fill="#ff7675" style="animation: blinker 1.2s infinite;"/>
+                            <text x="74" y="192" fill="#dfe6e9" font-size="11" text-anchor="middle">Tạo dung dịch bão hòa</text>
+                            <text x="74" y="207" fill="#dfe6e9" font-size="11" text-anchor="middle">ở nhiệt độ cao</text>
+                        </g>
+
+                        <!-- Mũi tên -->
+                        <text x="172" y="125" fill="#ffeaa7" font-size="22" font-weight="bold">→</text>
+
+                        <!-- Bước b -->
+                        <g transform="translate(190, 10)">
+                            <rect x="0" y="0" width="148" height="220" rx="12" fill="rgba(255,255,255,0.06)" stroke="rgba(255,255,255,0.2)"/>
+                            <text x="74" y="24" fill="#ffeaa7" font-size="13" font-weight="bold" text-anchor="middle">b) Lọc nóng</text>
+                            <polygon points="44,54 104,54 78,94 70,94" fill="rgba(255,255,255,0.15)" stroke="#ffffff" stroke-width="2"/>
+                            <circle cx="70" cy="70" r="3" fill="#a29bfe"/>
+                            <circle cx="78" cy="72" r="3.5" fill="#a29bfe"/>
+                            <polygon points="62,94 86,94 106,162 42,162" fill="rgba(255,255,255,0.08)" stroke="#ffffff" stroke-width="2"/>
+                            <polygon points="50,136 98,136 105,161 43,161" fill="rgba(129,236,236,0.45)"/>
+                            <circle cx="74" cy="100" r="2.5" fill="#81ecec" style="animation: dropFall 1.1s infinite;"/>
+                            <text x="74" y="192" fill="#dfe6e9" font-size="11" text-anchor="middle">Loại bỏ tạp chất</text>
+                            <text x="74" y="207" fill="#dfe6e9" font-size="11" text-anchor="middle">không tan</text>
+                        </g>
+
+                        <text x="347" y="125" fill="#ffeaa7" font-size="22" font-weight="bold">→</text>
+
+                        <!-- Bước c -->
+                        <g transform="translate(365, 10)">
+                            <rect x="0" y="0" width="148" height="220" rx="12" fill="rgba(255,255,255,0.06)" stroke="rgba(255,255,255,0.2)"/>
+                            <text x="74" y="24" fill="#ffeaa7" font-size="13" font-weight="bold" text-anchor="middle">c) Làm lạnh kết tinh</text>
+                            <!-- Chậu nước đá -->
+                            <rect x="26" y="118" width="96" height="48" rx="6" fill="rgba(116,185,255,0.28)" stroke="#74b9ff" stroke-width="2"/>
+                            <polygon points="64,74 84,74 102,158 46,158" fill="rgba(255,255,255,0.12)" stroke="#ffffff" stroke-width="2"/>
+                            <!-- Tinh thể kết tinh ở đáy -->
+                            <polygon points="60,154 66,144 72,154" fill="#ffffff"/>
+                            <polygon points="70,154 76,142 82,154" fill="#55efc4"/>
+                            <polygon points="78,154 84,145 90,154" fill="#ffffff"/>
+                            <text x="74" y="192" fill="#dfe6e9" font-size="11" text-anchor="middle">Độ tan giảm mạnh,</text>
+                            <text x="74" y="207" fill="#dfe6e9" font-size="11" text-anchor="middle">tinh thể tách ra</text>
+                        </g>
+
+                        <text x="522" y="125" fill="#ffeaa7" font-size="22" font-weight="bold">→</text>
+
+                        <!-- Bước d -->
+                        <g transform="translate(540, 10)">
+                            <rect x="0" y="0" width="128" height="220" rx="12" fill="rgba(255,255,255,0.06)" stroke="rgba(255,255,255,0.2)"/>
+                            <text x="64" y="24" fill="#ffeaa7" font-size="13" font-weight="bold" text-anchor="middle">d) Lọc thu rắn</text>
+                            <rect x="36" y="48" width="56" height="26" rx="4" fill="rgba(255,255,255,0.15)" stroke="#ffffff" stroke-width="2"/>
+                            <rect x="42" y="58" width="44" height="12" rx="3" fill="#55efc4"/>
+                            <polygon points="52,74 76,74 96,162 32,162" fill="rgba(255,255,255,0.08)" stroke="#ffffff" stroke-width="2"/>
+                            <line x1="80" y1="95" x2="108" y2="95" stroke="#ffffff" stroke-width="2.5"/>
+                            <circle cx="64" cy="96" r="2.5" fill="#74b9ff" style="animation: dropFall 1.2s infinite;"/>
+                            <text x="64" y="192" fill="#dfe6e9" font-size="11" text-anchor="middle">Lọc hút thu</text>
+                            <text x="64" y="207" fill="#dfe6e9" font-size="11" text-anchor="middle">tinh thể sạch</text>
+                        </g>
+                    </svg>
+                `;
+                desc.innerHTML = '<strong>💎 Quy trình Kết tinh 4 bước (Hình 11.7a–d, SGK tr.67):</strong> (a) Hòa tan chất rắn lẫn tạp chất tạo dung dịch bão hòa ở nhiệt độ cao &rarr; (b) Lọc nóng loại bỏ tạp chất không tan &rarr; (c) Để nguội, làm lạnh trong chậu nước đá để chất cần tinh chế kết tinh &rarr; (d) Lọc thu chất rắn tinh khiết.';
+            } else if (simId === 4) {
+                // Hình 11.8: Sắc kí cột
+                visual.innerHTML = `
+                    <svg viewBox="0 0 600 255" style="width:100%; max-width:600px; height:auto;">
+                        <!-- Giá đỡ -->
+                        <line x1="120" y1="15" x2="120" y2="245" stroke="#b2bec3" stroke-width="5"/>
+                        <line x1="85" y1="245" x2="185" y2="245" stroke="#b2bec3" stroke-width="6"/>
+                        <line x1="120" y1="65" x2="195" y2="65" stroke="#b2bec3" stroke-width="4"/>
+                        <line x1="120" y1="145" x2="195" y2="145" stroke="#b2bec3" stroke-width="4"/>
+
+                        <!-- Cột thủy tinh sắc kí -->
+                        <rect x="195" y="18" width="44" height="162" rx="4" fill="rgba(255,255,255,0.08)" stroke="#ffffff" stroke-width="2.5"/>
+                        <!-- Pha tĩnh silica gel -->
+                        <rect x="197" y="42" width="40" height="134" fill="rgba(255,255,255,0.18)"/>
+                        <!-- Các băng màu tách ra với tốc độ khác nhau -->
+                        <rect x="197" y="48" width="40" height="15" fill="#0984e3" style="animation: bandSlow 5.5s infinite alternate;"/>
+                        <rect x="197" y="72" width="40" height="16" fill="#e17055" style="animation: bandMid 5.5s infinite alternate;"/>
+                        <rect x="197" y="96" width="40" height="16" fill="#fdcb6e" style="animation: bandFast 5.5s infinite alternate;"/>
+
+                        <!-- Khóa cột -->
+                        <rect x="212" y="180" width="10" height="22" fill="none" stroke="#ffffff" stroke-width="2"/>
+                        <circle cx="217" cy="190" r="5" fill="#ff7675"/>
+                        <circle cx="217" cy="204" r="3" fill="#fdcb6e" style="animation: dropFall 1s infinite;"/>
+
+                        <!-- Cốc hứng phân đoạn -->
+                        <rect x="194" y="212" width="46" height="32" rx="3" fill="rgba(255,255,255,0.1)" stroke="#ffffff" stroke-width="2"/>
+                        <rect x="196" y="228" width="42" height="14" fill="rgba(253,203,110,0.65)"/>
+
+                        <!-- Chú thích bên phải -->
+                        <text x="275" y="40" fill="#ffffff" font-size="14" font-weight="bold">Pha động (dung môi chảy liên tục)</text>
+                        <text x="275" y="62" fill="#dfe6e9" font-size="12.5">Pha tĩnh: Bột silica gel / aluminium oxide</text>
+
+                        <rect x="275" y="85" width="16" height="16" rx="3" fill="#0984e3"/>
+                        <text x="300" y="98" fill="#74b9ff" font-size="13" font-weight="bold">Băng xanh: Hấp phụ mạnh nhất → Di chuyển chậm nhất</text>
+
+                        <rect x="275" y="116" width="16" height="16" rx="3" fill="#e17055"/>
+                        <text x="300" y="129" fill="#fab1a0" font-size="13" font-weight="bold">Băng cam: Hấp phụ trung bình → Di chuyển trung bình</text>
+
+                        <rect x="275" y="147" width="16" height="16" rx="3" fill="#fdcb6e"/>
+                        <text x="300" y="160" fill="#ffeaa7" font-size="13" font-weight="bold">Băng vàng: Hấp phụ kém nhất → Ra khỏi cột trước</text>
+
+                        <text x="275" y="228" fill="#55efc4" font-size="13" font-weight="bold">← Hứng từng phân đoạn riêng, sau đó loại bỏ dung môi</text>
+                    </svg>
+                `;
+                desc.innerHTML = '<strong>📊 Sắc kí cột (Hình 11.8, SGK tr.68):</strong> Khi pha động chảy liên tục qua pha tĩnh (silica gel, aluminium oxide), các chất trong hỗn hợp phân bố khác nhau nên di chuyển với tốc độ khác nhau, tách thành các băng màu riêng biệt để thu từng phân đoạn.';
+            }
+        }
+
+        function renderExtractionSim() {
+            const visual = document.getElementById('simVisual');
+            const desc = document.getElementById('simDesc');
+
+            const lowerLayerSVG = isFunnelDrained
+                ? ''
+                : `<path d="M 104,106 Q 112,132 140,144 Q 168,132 176,106 Z" fill="rgba(255,159,104,0.45)"/>`;
+            const upperLayerSVG = isFunnelDrained
+                ? `<path d="M 105,112 Q 114,132 140,144 Q 166,132 175,112 Z" fill="rgba(243,156,18,0.92)"/>`
+                : `<path d="M 101,78 Q 98,92 104,106 L 176,106 Q 182,92 179,78 Z" fill="rgba(243,156,18,0.92)"/>`;
+            const flaskLiquidSVG = isFunnelDrained
+                ? `<polygon points="116,216 164,216 176,244 104,244" fill="rgba(255,159,104,0.55)"/>`
+                : `<polygon points="108,238 172,238 176,244 104,244" fill="rgba(255,159,104,0.2)"/>`;
+            const dropSVG = isFunnelDrained
+                ? ''
+                : `<circle cx="140" cy="176" r="3" fill="#ff9f68" opacity="0.4"/>`;
+
+            visual.innerHTML = `
+                <svg viewBox="0 0 580 255" style="width:100%; max-width:580px; height:auto;">
+                    <!-- Giá thí nghiệm -->
+                    <line x1="65" y1="15" x2="65" y2="248" stroke="#b2bec3" stroke-width="5"/>
+                    <line x1="35" y1="248" x2="180" y2="248" stroke="#b2bec3" stroke-width="6"/>
+                    <line x1="65" y1="95" x2="102" y2="95" stroke="#b2bec3" stroke-width="4"/>
+
+                    <!-- Phễu chiết quả lê -->
+                    <rect x="131" y="20" width="18" height="22" fill="none" stroke="#ffffff" stroke-width="2.5"/>
+                    <path d="M 131,42 C 95,62 94,122 140,145 C 186,122 185,62 149,42 Z" fill="rgba(255,255,255,0.08)" stroke="#ffffff" stroke-width="2.5"/>
+                    ${upperLayerSVG}
+                    ${lowerLayerSVG}
+
+                    <!-- Cuống phễu & khóa -->
+                    <rect x="136" y="145" width="8" height="32" fill="none" stroke="#ffffff" stroke-width="2"/>
+                    <rect x="128" y="156" width="24" height="7" rx="3" fill="${isFunnelDrained ? '#2ecc71' : '#e74c3c'}"/>
+                    ${dropSVG}
+
+                    <!-- Bình tam giác 100 mL hứng lớp nước -->
+                    <polygon points="128,188 152,188 178,245 102,245" fill="rgba(255,255,255,0.08)" stroke="#ffffff" stroke-width="2.5"/>
+                    ${flaskLiquidSVG}
+
+                    <!-- Chú thích -->
+                    <text x="225" y="88" fill="#f39c12" font-size="14" font-weight="bold">← Lớp trên: Hexane + β-carotene (vàng cam)</text>
+                    <text x="225" y="106" fill="#dfe6e9" font-size="12">(Hexane nhẹ hơn nước: D = 0,655 g/mL)</text>
+
+                    <text x="225" y="138" fill="#ffbe76" font-size="14" font-weight="bold">← Lớp dưới: Nước ép cà rốt nhạt màu hơn</text>
+                    <text x="225" y="156" fill="#dfe6e9" font-size="12">(Nước nặng hơn nên nằm ở dưới và chảy ra trước)</text>
+
+                    <text x="225" y="222" fill="#55efc4" font-size="13.5" font-weight="bold">${isFunnelDrained ? '✔ Đã xả lớp nước xuống bình tam giác! Giữ lại lớp hexane chứa β-carotene trong phễu.' : '👉 Bấm nút "Mở khóa phễu chiết" bên dưới để tách hai lớp!'}</text>
+                </svg>
+                <div class="sim-action-bar">
+                    <button class="btn-sim-action" onclick="toggleFunnelValve()">
+                        ${isFunnelDrained ? '🔄 Đóng khóa & Đặt lại phễu chiết' : '💧 Mở khóa phễu chiết (Xả lớp nước)'}
+                    </button>
+                </div>
+            `;
+            desc.innerHTML = '<strong>🧪 Thí nghiệm Chiết tách β-carotene (Hình 11.5, SGK tr.66):</strong> Trộn 20 mL nước ép cà rốt với 20 mL hexane trong phễu chiết 60 mL, lắc 2 phút rồi để yên 5 phút. Lớp hexane nhẹ hơn nổi ở trên chuyển từ không màu sang <strong>vàng cam</strong>. Mở khóa cho lớp nước ở dưới chảy ra bình tam giác trước để tách riêng dịch chiết.';
+        }
+
+        function toggleFunnelValve() {
+            playSound('correct');
+            isFunnelDrained = !isFunnelDrained;
+            renderExtractionSim();
+        }
+
+        /* =========================================================
+           7. KHÔNG GIAN LUYỆN TẬP & TÍNH ĐIỂM CHUẨN TN THPT 2025
+           ========================================================= */
+        function selectPracticePart(partNum) {
+            playSound('click');
+            currentPart = partNum;
+            currentQuestionIdx = 0;
+
+            document.querySelectorAll('.sub-item').forEach((item, idx) => {
+                item.classList.toggle('active', idx === partNum - 1);
+            });
+
+            generateQuestionPaginationDots();
+            renderPracticeContent();
+        }
+
+        function getQuestionStatus(part, idx) {
+            const key = `${part}_${idx}`;
+            const rec = savedState[key];
+            if (!rec) return null;
+            if (part === 2) {
+                if (rec.correctCount === 4) return 'correct';
+                if (rec.correctCount > 0) return 'partial';
+                return 'incorrect';
+            }
+            return rec.isCorrect ? 'correct' : 'incorrect';
+        }
+
+        function generateQuestionPaginationDots() {
+            [1, 2, 3].forEach(p => {
+                const box = document.getElementById(`questionDotsPart${p}`);
+                if (!box) return;
+                if (p !== currentPart) {
+                    box.style.display = 'none';
+                    return;
+                }
+                box.style.display = 'grid';
+                box.innerHTML = '';
+                quizData[p].forEach((_, idx) => {
+                    const btn = document.createElement('button');
+                    btn.className = 'dot-btn';
+                    const status = getQuestionStatus(p, idx);
+                    if (status) btn.classList.add(status);
+                    if (idx === currentQuestionIdx) btn.classList.add('active');
+                    btn.textContent = idx + 1;
+                    btn.onclick = (e) => {
+                        e.stopPropagation();
+                        playSound('click');
+                        currentQuestionIdx = idx;
+                        generateQuestionPaginationDots();
+                        renderPracticeContent();
+                    };
+                    box.appendChild(btn);
+                });
+            });
+        }
+
+        function appendMarked(target, text, phrases) {
+            target.replaceChildren();
+            const terms = (phrases || []).filter(Boolean).sort((a, b) => b.length - a.length);
+            if (!terms.length) {
+                target.textContent = text;
+                return;
+            }
+            const escaped = terms.map(t => t.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')).join('|');
+            const regex = new RegExp(escaped, 'giu');
+            let offset = 0;
+            for (const m of text.matchAll(regex)) {
+                const mark = document.createElement('mark');
+                mark.className = 'practice-mark';
+                mark.textContent = m[0];
+                target.append(text.slice(offset, m.index), mark);
+                offset = m.index + m[0].length;
+            }
+            target.append(text.slice(offset));
+        }
+
+        function togglePracticeKeywords() {
+            playSound('click');
+            const btn = document.getElementById('stemToggle');
+            const active = btn.getAttribute('aria-pressed') !== 'true';
+            btn.setAttribute('aria-pressed', String(active));
+            const qObj = quizData[currentPart][currentQuestionIdx];
+            appendMarked(document.getElementById('questionText'), qObj.q, active ? qObj.keywords : []);
+        }
+
+        function renderPracticeContent() {
+            const list = quizData[currentPart];
+            const qObj = list[currentQuestionIdx];
+            const key = `${currentPart}_${currentQuestionIdx}`;
+            const record = savedState[key];
+
+            const partNames = {
+                1: 'Phần I. Trắc nghiệm nhiều lựa chọn (4,50đ)',
+                2: 'Phần II. Trắc nghiệm Đúng / Sai 4 ý (4,00đ)',
+                3: 'Phần III. Trắc nghiệm Trả lời ngắn (1,50đ)'
+            };
+            const pointLabels = {
+                1: '0,25 điểm',
+                2: 'Tối đa 1,00 điểm',
+                3: '0,25 điểm'
+            };
+
+            document.getElementById('headerPartTitle').textContent = partNames[currentPart];
+            document.getElementById('headerProgress').textContent = `Câu ${currentQuestionIdx + 1} / ${list.length}`;
+            document.getElementById('questionBadge').textContent = `Phần ${['', 'I', 'II', 'III'][currentPart]} • Câu ${currentQuestionIdx + 1} / ${list.length}`;
+            document.getElementById('levelBadge').textContent = `${qObj.level} • ${pointLabels[currentPart]}`;
+
+            // Bảng số liệu Phần III
+            const dataBox = document.getElementById('dataBox');
+            const layout = document.getElementById('practiceLayout');
+            if (currentPart === 3 && qObj.tableHTML) {
+                dataBox.style.display = 'flex';
+                document.getElementById('dataTitle').textContent = qObj.tableTitle || 'BẢNG DỮ LIỆU THỰC NGHIỆM';
+                document.getElementById('dataTableContainer').innerHTML = qObj.tableHTML;
+                layout.classList.add('has-table');
+            } else {
+                dataBox.style.display = 'none';
+                layout.classList.remove('has-table');
+            }
+
+            // Nội dung đề bài
+            document.getElementById('questionText').textContent = qObj.q;
+            document.getElementById('stemToggle').setAttribute('aria-pressed', 'false');
+
+            // Ẩn/hiện 3 khu vực trả lời
+            document.getElementById('multipleChoiceArea').style.display = currentPart === 1 ? 'grid' : 'none';
+            document.getElementById('trueFalseArea').style.display = currentPart === 2 ? 'flex' : 'none';
+            document.getElementById('shortAnswerArea').style.display = currentPart === 3 ? 'flex' : 'none';
+
+            if (currentPart === 1) {
+                renderPart1UI(qObj, record);
+            } else if (currentPart === 2) {
+                renderPart2UI(qObj, record);
+            } else if (currentPart === 3) {
+                const input = document.getElementById('numberAnswer');
+                input.value = record ? record.userAnswer : '';
+                renderFeedbackBox(qObj, record);
+            }
+
+            updateTeacherHint();
+            document.getElementById('btnPrev').disabled = currentQuestionIdx === 0;
+            document.getElementById('btnNext').disabled = currentQuestionIdx === list.length - 1;
+        }
+
+        function renderPart1UI(qObj, record) {
+            const letters = ['A', 'B', 'C', 'D'];
+            document.querySelectorAll('#multipleChoiceArea .choice-btn').forEach((btn, i) => {
+                const letter = letters[i];
+                const chosen = record && record.userAnswer === letter;
+                btn.classList.toggle('selected', Boolean(chosen));
+                btn.classList.toggle('revealed-correct', Boolean(record) && letter === qObj.answer);
+                btn.classList.toggle('revealed-wrong', Boolean(chosen) && letter !== qObj.answer);
+                const valEl = btn.querySelector('.choice-val');
+                appendMarked(valEl, qObj.choices[i], record && qObj.optionFocus ? [qObj.optionFocus[i]] : []);
+            });
+            renderFeedbackBox(qObj, record);
+        }
+
+        function selectChoice(letter) {
+            const qObj = quizData[1][currentQuestionIdx];
+            const isCorrect = letter === qObj.answer;
+            savedState[`1_${currentQuestionIdx}`] = {
+                userAnswer: letter,
+                isCorrect,
+                score: isCorrect ? 0.25 : 0
+            };
+            persistState();
+            playSound(isCorrect ? 'correct' : 'wrong');
+            generateQuestionPaginationDots();
+            renderPracticeContent();
+        }
+
+        // PHẦN II: ĐÚNG / SAI 4 Ý
+        function renderPart2UI(qObj, record) {
+            const key = `2_${currentQuestionIdx}`;
+            if (!tempTFSelection[key]) {
+                tempTFSelection[key] = record ? { ...record.answers } : {};
+            }
+            const currentSel = record ? record.answers : tempTFSelection[key];
+            const container = document.getElementById('tfStatementsContainer');
+            container.innerHTML = '';
+
+            qObj.statements.forEach(st => {
+                const row = document.createElement('div');
+                row.className = 'tf-row';
+                if (record) {
+                    const userVal = record.answers[st.label];
+                    row.classList.add(userVal === st.answer ? 'row-correct' : 'row-wrong');
+                }
+
+                const textDiv = document.createElement('div');
+                textDiv.className = 'tf-stmt-text';
+                textDiv.innerHTML = `<strong>${st.label})</strong> ${st.text}`;
+
+                const btnGroup = document.createElement('div');
+                btnGroup.className = 'tf-btn-group';
+
+                const btnTrue = document.createElement('button');
+                btnTrue.className = 'tf-toggle-btn';
+                btnTrue.textContent = 'Đúng';
+                if (currentSel[st.label] === true) btnTrue.classList.add('active-true');
+                btnTrue.onclick = () => setTFChoice(st.label, true);
+
+                const btnFalse = document.createElement('button');
+                btnFalse.className = 'tf-toggle-btn';
+                btnFalse.textContent = 'Sai';
+                if (currentSel[st.label] === false) btnFalse.classList.add('active-false');
+                btnFalse.onclick = () => setTFChoice(st.label, false);
+
+                btnGroup.append(btnTrue, btnFalse);
+                row.append(textDiv, btnGroup);
+                container.appendChild(row);
+            });
+
+            renderFeedbackBox(qObj, record);
+        }
+
+        function setTFChoice(label, val) {
+            playSound('click');
+            const key = `2_${currentQuestionIdx}`;
+            if (!tempTFSelection[key]) tempTFSelection[key] = {};
+            tempTFSelection[key][label] = val;
+            // Nếu đã chấm trước đó, xóa trạng thái cũ để học sinh chọn lại và bấm chấm
+            if (savedState[key]) {
+                delete savedState[key];
+                persistState();
+                generateQuestionPaginationDots();
+            }
+            renderPart2UI(quizData[2][currentQuestionIdx], null);
+        }
+
+        function calcPart2Score(correctCount) {
+            if (correctCount === 1) return 0.10;
+            if (correctCount === 2) return 0.25;
+            if (correctCount === 3) return 0.50;
+            if (correctCount === 4) return 1.00;
+            return 0;
+        }
+
+        function submitTrueFalseQuestion() {
+            const key = `2_${currentQuestionIdx}`;
+            const qObj = quizData[2][currentQuestionIdx];
+            const sel = tempTFSelection[key] || {};
+            const answeredAll = qObj.statements.every(st => typeof sel[st.label] === 'boolean');
+            if (!answeredAll) {
+                playSound('wrong');
+                showInfoModal('📝', 'Chưa chọn đủ 4 ý!', 'Vui lòng chọn <strong>Đúng</strong> hoặc <strong>Sai</strong> cho cả 4 ý a), b), c), d) trước khi bấm Chấm điểm.');
+                return;
+            }
+            let correctCount = 0;
+            qObj.statements.forEach(st => {
+                if (sel[st.label] === st.answer) correctCount++;
+            });
+            const score = calcPart2Score(correctCount);
+            savedState[key] = {
+                answers: { ...sel },
+                correctCount,
+                score,
+                isCorrect: correctCount === 4
+            };
+            persistState();
+            playSound(correctCount >= 3 ? 'correct' : 'wrong');
+            generateQuestionPaginationDots();
+            renderPracticeContent();
+        }
+
+        // PHẦN III: TRẢ LỜI NGẮN
+        function verifyShortAnswer() {
+            const input = document.getElementById('numberAnswer');
+            const raw = input.value.trim();
+            if (!/^[+-]?(?:\d+(?:[.,]\d+)?|[.,]\d+)$/.test(raw)) {
+                playSound('wrong');
+                showInfoModal('⚠️', 'Định dạng số chưa hợp lệ', 'Vui lòng nhập đáp án dạng số (ví dụ: <strong>200</strong> hoặc <strong>21,7</strong>).');
+                return;
+            }
+            const qObj = quizData[3][currentQuestionIdx];
+            const userNum = Number(raw.replace(',', '.'));
+            const ansNum = Number(qObj.answer.replace(',', '.'));
+            const isCorrect = Math.abs(userNum - ansNum) < 1e-6;
+
+            savedState[`3_${currentQuestionIdx}`] = {
+                userAnswer: raw,
+                isCorrect,
+                score: isCorrect ? 0.25 : 0
+            };
+            persistState();
+            playSound(isCorrect ? 'correct' : 'wrong');
+            generateQuestionPaginationDots();
+            renderPracticeContent();
+        }
+
+        function renderFeedbackBox(qObj, record) {
+            const box = document.getElementById('practiceFeedback');
+            box.className = '';
+            if (!record) {
+                box.hidden = true;
+                box.innerHTML = '';
+                return;
+            }
+            box.hidden = false;
+
+            if (currentPart === 1) {
+                box.classList.add(record.isCorrect ? 'fb-correct' : 'fb-wrong');
+                const ansIdx = qObj.answer.charCodeAt(0) - 65;
+                box.innerHTML = `
+                    <p><strong>${record.isCorrect ? '✅ Chính xác! (+0,25 điểm)' : '❌ Chưa chính xác (0,00 điểm)'}</strong></p>
+                    <p><strong>Đáp án đúng: ${qObj.answer}</strong> — ${qObj.choices[ansIdx]}</p>
+                    <p><strong>💡 Giải thích chi tiết:</strong> ${qObj.explain}</p>
+                `;
+            } else if (currentPart === 2) {
+                const cls = record.correctCount === 4 ? 'fb-correct' : (record.correctCount > 0 ? 'fb-partial' : 'fb-wrong');
+                box.classList.add(cls);
+                const listHTML = qObj.statements.map(st => {
+                    const ok = record.answers[st.label] === st.answer;
+                    const icon = ok ? '✅' : '❌';
+                    const keyLabel = st.answer ? 'Đúng' : 'Sai';
+                    return `<li>${icon} <strong>Ý ${st.label}) — Đáp án: ${keyLabel}.</strong> ${st.explain}</li>`;
+                }).join('');
+                box.innerHTML = `
+                    <p><strong>📊 Kết quả: Đúng ${record.correctCount}/4 ý (+${formatVNScore(record.score)} điểm)</strong></p>
+                    <ul>${listHTML}</ul>
+                `;
+            } else if (currentPart === 3) {
+                box.classList.add(record.isCorrect ? 'fb-correct' : 'fb-wrong');
+                box.innerHTML = `
+                    <p><strong>${record.isCorrect ? '✅ Chính xác! (+0,25 điểm)' : '❌ Chưa chính xác (0,00 điểm)'}</strong></p>
+                    <p><strong>Đáp án đúng:</strong> ${qObj.answer} ${qObj.unit || ''}</p>
+                    <p><strong>💡 Hướng dẫn giải chi tiết:</strong><br>${qObj.explain}</p>
+                `;
+            }
+        }
+
+        function navigateQuestion(dir) {
+            playSound('click');
+            const list = quizData[currentPart];
+            const nextIdx = currentQuestionIdx + dir;
+            if (nextIdx >= 0 && nextIdx < list.length) {
+                currentQuestionIdx = nextIdx;
+                generateQuestionPaginationDots();
+                renderPracticeContent();
+            }
+        }
+
+        function resetCurrentQuestion() {
+            playSound('click');
+            const key = `${currentPart}_${currentQuestionIdx}`;
+            delete savedState[key];
+            delete tempTFSelection[key];
+            persistState();
+            generateQuestionPaginationDots();
+            renderPracticeContent();
+        }
+
+        function openResetModal() {
+            playSound('click');
+            document.getElementById('resetModal').classList.add('show');
+        }
+
+        function confirmResetPractice() {
+            savedState = {};
+            tempTFSelection = {};
+            localStorage.removeItem(STORAGE_KEY);
+            closeModal('resetModal');
+            updateHeaderScore();
+            currentPart = 1;
+            currentQuestionIdx = 0;
+            document.querySelectorAll('.sub-item').forEach((el, idx) => el.classList.toggle('active', idx === 0));
+            generateQuestionPaginationDots();
+            if (currentPane === 'pane-practice') renderPracticeContent();
+            if (currentPane === 'pane-dashboard') renderDashboard();
+            showInfoModal('✨', 'Đã làm mới toàn bộ luyện tập!', 'Tất cả 28 câu hỏi đã được đặt lại về trạng thái ban đầu.');
+        }
+
+        /* =========================================================
+           8. CHẾ ĐỘ GIÁO VIÊN (MÃ PIN: 1234)
+           ========================================================= */
+        function openTeacherPinModal() {
+            playSound('click');
+            if (isTeacherMode) {
+                toggleTeacherMode(false);
+                return;
+            }
+            document.getElementById('teacherPinInput').value = '';
+            document.getElementById('teacherPinError').textContent = '';
+            document.getElementById('teacherPinModal').classList.add('show');
+            setTimeout(() => document.getElementById('teacherPinInput').focus(), 100);
+        }
+
+        function verifyTeacherPin() {
+            const val = document.getElementById('teacherPinInput').value.trim();
+            if (val === '1234') {
+                closeModal('teacherPinModal');
+                toggleTeacherMode(true);
+            } else {
+                playSound('wrong');
+                document.getElementById('teacherPinError').textContent = 'Mã PIN không đúng! (Gợi ý: 1234)';
+            }
+        }
+
+        function toggleTeacherMode(enable) {
+            isTeacherMode = enable;
+            document.getElementById('teacherBanner').style.display = enable ? 'flex' : 'none';
+            if (enable) playSound('correct');
+            updateTeacherHint();
+        }
+
+        function updateTeacherHint() {
+            const hintEl = document.getElementById('teacherAnswerHint');
+            const qObj = quizData[currentPart][currentQuestionIdx];
+            if (!hintEl || !qObj) return;
+            if (currentPart === 2) {
+                hintEl.textContent = qObj.statements.map(s => `${s.label}-${s.answer ? 'Đ' : 'S'}`).join(' | ');
+            } else {
+                hintEl.textContent = qObj.answer;
+            }
+        }
+
+        /* =========================================================
+           9. TÍNH ĐIỂM & BÁO CÁO KẾT QUẢ (DASHBOARD)
+           ========================================================= */
+        function formatVNScore(num) {
+            return num.toFixed(2).replace('.', ',');
+        }
+
+        function computeExamScores() {
+            let p1 = 0, p2 = 0, p3 = 0;
+            let solved = 0, fullCorrect = 0;
+
+            for (let i = 0; i < quizData[1].length; i++) {
+                const r = savedState[`1_${i}`];
+                if (r) {
+                    solved++;
+                    p1 += r.score || 0;
+                    if (r.isCorrect) fullCorrect++;
+                }
+            }
+            for (let i = 0; i < quizData[2].length; i++) {
+                const r = savedState[`2_${i}`];
+                if (r) {
+                    solved++;
+                    p2 += r.score || 0;
+                    if (r.correctCount === 4) fullCorrect++;
+                }
+            }
+            for (let i = 0; i < quizData[3].length; i++) {
+                const r = savedState[`3_${i}`];
+                if (r) {
+                    solved++;
+                    p3 += r.score || 0;
+                    if (r.isCorrect) fullCorrect++;
+                }
+            }
+            return { p1, p2, p3, total: p1 + p2 + p3, solved, fullCorrect };
+        }
+
+        function updateHeaderScore() {
+            const s = computeExamScores();
+            document.getElementById('headerScore').textContent = `Điểm dự kiến: ${formatVNScore(s.total)} / 10,00`;
+        }
+
+        function renderDashboard() {
+            const s = computeExamScores();
+            const totalQ = 28;
+            const needReview = s.solved - s.fullCorrect;
+
+            document.getElementById('dashTotalScore').textContent = `${formatVNScore(s.total)} / 10,00`;
+            document.getElementById('dashScoreP1').textContent = `${formatVNScore(s.p1)} / 4,50đ`;
+            document.getElementById('dashScoreP2').textContent = `${formatVNScore(s.p2)} / 4,00đ`;
+            document.getElementById('dashScoreP3').textContent = `${formatVNScore(s.p3)} / 1,50đ`;
+
+            document.getElementById('statTotalSolved').textContent = `${s.solved} / ${totalQ}`;
+            document.getElementById('statFullCorrect').textContent = s.fullCorrect;
+            document.getElementById('statNeedReview').textContent = needReview;
+
+            const pct = Math.round((s.solved / totalQ) * 100);
+            document.getElementById('statProgressPct').textContent = `${pct}%`;
+            document.getElementById('statProgressBar').style.width = `${pct}%`;
+
+            [1, 2, 3].forEach(part => {
+                const grid = document.getElementById(`dashGridPart${part}`);
+                grid.innerHTML = '';
+                quizData[part].forEach((_, idx) => {
+                    const btn = document.createElement('button');
+                    btn.className = 'node-btn';
+                    btn.textContent = idx + 1;
+                    const st = getQuestionStatus(part, idx);
+                    if (st) btn.classList.add(st);
+                    btn.onclick = () => {
+                        currentPart = part;
+                        currentQuestionIdx = idx;
+                        document.querySelectorAll('.sub-item').forEach((el, k) => el.classList.toggle('active', k === part - 1));
+                        switchPane('pane-practice', document.getElementById('nav-practice'));
+                    };
+                    grid.appendChild(btn);
+                });
+            });
+        }
+
+        /* =========================================================
+           10. VÒNG QUAY MAY MẮN (CANVAS 420x420)
+           ========================================================= */
+        const defaultWheelNames = [
+            "Nguyễn Minh An", "Trần Gia Bảo", "Lê Thu Hà", "Phạm Quang Huy",
+            "Vũ Ngọc Lan", "Hoàng Đức Minh", "Đỗ Thảo Nhi", "Bùi Anh Quân",
+            "Ngô Khánh Vy", "Phan Thanh Tùng"
+        ];
+        let wheelNames = [...defaultWheelNames];
+        let wheelAngle = 0;
+        let isSpinning = false;
+        const wheelColors = [
+            "#ff7675", "#fdcb6e", "#00b894", "#0984e3", "#6c5ce7",
+            "#e84393", "#e17055", "#00cec9", "#34495e", "#f39c12"
+        ];
+
+        function drawWheel() {
+            const canvas = document.getElementById('wheelCanvas');
+            if (!canvas) return;
+            const ctx = canvas.getContext('2d');
+            const cx = canvas.width / 2;
+            const cy = canvas.height / 2;
+            const r = canvas.width / 2 - 10;
+
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            if (wheelNames.length === 0) {
+                ctx.fillStyle = '#2c3e50';
+                ctx.font = 'bold 18px sans-serif';
+                ctx.textAlign = 'center';
+                ctx.fillText('Hãy nhập tên học sinh!', cx, cy);
+                return;
+            }
+
+            const arc = (2 * Math.PI) / wheelNames.length;
+            wheelNames.forEach((name, i) => {
+                const start = wheelAngle + i * arc;
+                ctx.beginPath();
+                ctx.fillStyle = wheelColors[i % wheelColors.length];
+                ctx.moveTo(cx, cy);
+                ctx.arc(cx, cy, r, start, start + arc);
+                ctx.closePath();
+                ctx.fill();
+                ctx.strokeStyle = '#ffffff';
+                ctx.lineWidth = 2;
+                ctx.stroke();
+
+                ctx.save();
+                ctx.translate(cx, cy);
+                ctx.rotate(start + arc / 2);
+                ctx.textAlign = 'right';
+                ctx.fillStyle = (i % wheelColors.length === 1) ? '#2c3e50' : '#ffffff';
+                ctx.font = 'bold 15px sans-serif';
+                ctx.fillText(name.slice(0, 18), r - 22, 5);
+                ctx.restore();
+            });
+        }
+
+        function updateNamesFromInput() {
+            const lines = document.getElementById('namesInput').value.split('\n');
+            wheelNames = lines.map(s => s.trim()).filter(Boolean);
+            drawWheel();
+        }
+
+        function resetWheelNames() {
+            playSound('click');
+            wheelNames = [...defaultWheelNames];
+            document.getElementById('namesInput').value = wheelNames.join('\n');
+            drawWheel();
+        }
+
+        function spinWheel() {
+            if (isSpinning || wheelNames.length === 0) return;
+            playSound('click');
+            isSpinning = true;
+
+            const startAngle = wheelAngle;
+            const extraRotation = (Math.random() * 5 + 7) * 2 * Math.PI;
+            const duration = 3800;
+            const startTime = performance.now();
+            let lastSector = -1;
+
+            function animate(now) {
+                const elapsed = now - startTime;
+                const progress = Math.min(elapsed / duration, 1);
+                const easeOut = 1 - Math.pow(1 - progress, 3);
+                wheelAngle = startAngle + extraRotation * easeOut;
+
+                const arc = (2 * Math.PI) / wheelNames.length;
+                const currentSector = Math.floor(((1.5 * Math.PI - wheelAngle) % (2 * Math.PI) + 2 * Math.PI) % (2 * Math.PI) / arc);
+                if (currentSector !== lastSector) {
+                    playSound('tick');
+                    lastSector = currentSector;
+                }
+
+                drawWheel();
+
+                if (progress < 1) {
+                    requestAnimationFrame(animate);
+                } else {
+                    isSpinning = false;
+                    const winnerIdx = currentSector % wheelNames.length;
+                    const winner = wheelNames[winnerIdx];
+                    playSound('correct');
+                    showInfoModal(
+                        '🎡',
+                        'VÒNG QUAY GỌI TÊN!',
+                        `Chúc mừng học sinh được chọn trả lời câu hỏi:<br><strong style="font-size: 1.9rem; color: var(--accent-teal); display: block; margin-top: 12px;">${winner}</strong>`
+                    );
+                }
+            }
+            requestAnimationFrame(animate);
+        }
+
+        /* =========================================================
+           11. KHỞI TẠO KHI TẢI TRANG
+           ========================================================= */
+        window.onload = function () {
+            document.getElementById('namesInput').value = wheelNames.join('\n');
+            drawWheel();
+            updateTimerDisplay();
+            updateHeaderScore();
+            runSim(1);
+        };
+    </script>
+</body>
+</html>
